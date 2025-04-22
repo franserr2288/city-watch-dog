@@ -1,0 +1,24 @@
+Copyright © Francisco Javier Serrano 2025. All rights reserved.
+
+This software and associated documentation (the “Software”) are provided solely for **demonstration and portfolio purposes**. The Software is intended to showcase design, architecture, and interface components of a civic technology platform developed by the author (“Licensor”).
+
+No rights are granted under this license to use, copy, modify, merge, publish, distribute, sublicense, or sell copies of the Software, in whole or in part, for any commercial or non-commercial purpose, without the prior **express written consent** of the Licensor.
+
+The Software may include references to system components or logic that are **maintained in a separate private repository** and are not included in this distribution. These may include, but are not limited to:
+- Automated action trigger mechanisms
+- External communication or dispatch systems
+- Deployment configurations
+
+These components are considered confidential and proprietary and are expressly excluded from this license.
+
+Permission for access to such components may be granted by the Licensor on a limited basis, subject to written agreement, nondisclosure obligations, or additional licensing terms.
+
+**Disclaimer of Warranty:** The Software is provided “as is,” without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, and noninfringement.
+
+**Limitation of Liability:** In no event shall the Licensor be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from or related to the use or inability to use the Software or its underlying components.
+
+For inquiries, permission requests, or collaboration opportunities, please contact:
+
+Francisco Javier Serrano 
+franserr2288@outlook.com
+

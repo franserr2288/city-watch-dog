@@ -1,0 +1,58 @@
+# JS
+node_modules/
+npm-debug.log*
+yarn-error.log
+dist/
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+env/
+venv/
+ENV/
+.Python
+
+# Environment & config files
+*.env
+.env.*
+secrets/
+config.json
+credentials.json
+
+# System / Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+*.log
+.idea/
+.vscode/
+
+# MacOS metadata
+.DS_Store
+
+# Output / reports / coverage
+coverage/
+htmlcov/
+*.cover
+*.log
+*.out
+
+# Git submodules – ignore contents, not the folder (for core submodule)
+core/*
+!core/.gitmodules
+!core/.gitkeep  # optional placeholder to show folder exists
+
+# Docs / generated files
+docs/*.pdf
+docs/*.svg
+docs/*.pptx
+
+docs/screenshots/
+
+*.csv
