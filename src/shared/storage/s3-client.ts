@@ -3,7 +3,7 @@ import {
     PutObjectCommand,
     S3Client,
 } from "@aws-sdk/client-s3";
-import { DataSource } from "../../extractors/common/sources";
+import { DataSource } from "../../domains/extractors/common/sources";
 import { Readable } from "stream";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import ExtradedDataStorageClient from "./storage-interface";
