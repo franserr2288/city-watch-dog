@@ -66,6 +66,4 @@ All rights reserved. Please do not reproduce or deploy without explicit permissi
 ## 🙌 Author & Intent
 
 Built by Francisco Serrano to demonstrate real-world engineering practices, clean architecture, and a passion for civic technology.  
-This project blends **data, community insight, and modern infrastructure** into a scalable, responsible tool.
-
-Let’s build something impactful.
+This project blends **data, community insight, and modern infrastructure** into a scalable, responsible tool
