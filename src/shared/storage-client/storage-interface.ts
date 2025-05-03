@@ -1,4 +1,4 @@
-import { DataSource } from "../../domains/extractors/common/sources";
+import { DataSource } from "../../contexts/source-intake/common/sources";
 
 export default interface ExtradedDataStorageClient{
     storeData(dataSource: DataSource, data: any): Promise<{ currentKey: string; snapshotKey: string }>;
