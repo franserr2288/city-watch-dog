@@ -37,7 +37,7 @@ This project is structured around **clean architecture principles** — separati
 - ✅ Lambda function handlers (in `entrypoints/`)
 - ✅ Shared utilities for storage and data versioning
 - ✅ Infrastructure as code via AWS SAM (`template.yaml`)
-- ✅ Public-facing interface mockups and UI flows (optional component)
+- ✅ Public-facing interface mockups and UI flows
 - ✅ Architecture-focused documentation and comments
 
 ---
