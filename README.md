@@ -1,55 +1,71 @@
-# 🏙️ CivicAction Platform (Public Demo)
+# 🏙️ CivicAction Platform (Portfolio Demo)
 
-This repository contains the **public-facing components** of the CivicAction platform — a modular civic engagement tool designed to empower residents and communities to take informed, localized actions based on data insights.
+**CivicAction** is a modular civic tech platform designed to empower communities through data. This repository showcases the **public-facing and architectural components** of the system, built with a focus on real-world structure, serverless architecture, and responsible design.
 
-🚧 **Important Notice:**  
-This is a **portfolio version** of the project. Certain core functionalities, including the action-trigger system and automated response mechanisms, are contained in a **private repository** for security reasons. More below.
-
----
-
-## 🧩 About the Platform
-
-The CivicAction system is designed to:
-
-- Enable local residents to report, monitor, and engage with civic issues
-- Use structured data to prioritize and recommend civic actions
-
-This version is structured for **demo purposes** and highlights architectural intent, UI flow, and key civic module structure.
-Because this project deals with civic reporting triggers and could be misused if deployed irresponsibly, I’ve kept the core logic private. What you're seeing is the full UI and architecture, and I’m happy to walk through the rest on request.
+> ✅ **Portfolio Note:**  
+> This version is a demonstration build intended to highlight technical decision-making, backend architecture, and modular data processing. Some sensitive or potentially abusable features (like automated action dispatchers) are kept private — more info below.
 
 ---
 
-## 📁 Included in This Repo
+## 🔍 TL;DR
 
-- ✅ User Interface and form components
-- ✅ Civic module architecture (categories, flows)
-- ✅ Simulated mock data inputs
-- ✅ Static visualizations
-- ✅ System architecture diagrams
-- ✅ Comments/documentation for each component
-- ✅ Real-time data ingestion and analysis code
+- A modular civic data platform designed to process, analyze, and surface local insights (e.g., 311 service data).
+- Uses a real-world, scalable architecture with TypeScript, AWS Lambda, and SAM.
+- Showcases domain-driven design, separation of concerns, and responsible system structuring.
+- Core logic for extractors, report generators, and storage is included — production-tier action systems are kept private.
 
 ---
 
-## 🔒 What’s Not Included
+## 🧠 Project Architecture
 
-The following components are part of a **private submodule** (`/core`) and are intentionally excluded from this repository to avoid potential misuse:
+This project is structured around **clean architecture principles** — separating domain logic, orchestration, infrastructure, and shared utilities.
 
-- ❌ Trigger engine logic (data → action mapping)
-- ❌ Action dispatchers (e.g., emailers, notification APIs)
-- ❌ Deployment and environment configurations
+### 🔧 Technologies Used
 
-This separation ensures responsible handling of civic systems and prevents malicious or unintended use.
+- **TypeScript**
+- **AWS Lambda (SAM)**
+- **Modular project structure**
+- **S3 for versioned data storage**
+- **Event-driven analysis logic**
 
-📩 Access Requests
+---
 
-If you are a potential employer, collaborator, or reviewer and would like to review the full system (including the private trigger logic), please contact me:
+## 📁 Included in This Repository
 
-📬 Email: franserr2288@outlook.com
-🔑 Access may be granted by agreement.
-⚖️ License Notice
+- ✅ Domain-driven code organization (`domains/`)
+- ✅ Data extractors and analysis pipelines (e.g., city-311)
+- ✅ Lambda function handlers (in `entrypoints/`)
+- ✅ Shared utilities for storage and data versioning
+- ✅ Infrastructure as code via AWS SAM (`template.yaml`)
+- ✅ Public-facing interface mockups and UI flows (optional component)
+- ✅ Architecture-focused documentation and comments
 
-This repository is provided for portfolio and demonstration purposes only.
-Use, reproduction, modification, or distribution of this code — in whole or in part — is prohibited without explicit written permission from the author.
+---
 
-For details, see LICENSE.txt.
+## 🔒 Private Components (Intentionally Excluded)
+
+Some features are kept in a private submodule for security and ethical reasons:
+
+- ❌ Trigger-action engine (e.g., automatic notifications, emails)
+- ❌ Sensitive deployment configurations
+- ❌ Real-world deployment secrets or keys
+
+If you're a **hiring manager or collaborator** and want to see the full system (including these private components), I'm happy to walk you through it.
+
+📬 Email: **franserr2288@outlook.com**
+
+---
+
+## 🛡️ License
+
+This repository is provided for portfolio and demonstration purposes only.  
+All rights reserved. Please do not reproduce or deploy without explicit permission. See `LICENSE.txt` for full terms.
+
+---
+
+## 🙌 Author & Intent
+
+Built by Francisco Serrano to demonstrate real-world engineering practices, clean architecture, and a passion for civic technology.  
+This project blends **data, community insight, and modern infrastructure** into a scalable, responsible tool.
+
+Let’s build something impactful.
