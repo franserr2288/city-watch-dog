@@ -10,11 +10,13 @@ This is a **portfolio version** of the project. Certain core functionalities, in
 ## 🧩 About the Platform
 
 The CivicAction system is designed to:
+
 - Enable local residents to report, monitor, and engage with civic issues
 - Use structured data to prioritize and recommend civic actions
 
 This version is structured for **demo purposes** and highlights architectural intent, UI flow, and key civic module structure.
 Because this project deals with civic reporting triggers and could be misused if deployed irresponsibly, I’ve kept the core logic private. What you're seeing is the full UI and architecture, and I’m happy to walk through the rest on request.
+
 ---
 
 ## 📁 Included in This Repo
@@ -38,7 +40,6 @@ The following components are part of a **private submodule** (`/core`) and are i
 - ❌ Deployment and environment configurations
 
 This separation ensures responsible handling of civic systems and prevents malicious or unintended use.
-
 
 📩 Access Requests
 

@@ -56,3 +56,4 @@ docs/*.pptx
 docs/screenshots/
 
 *.csv
+*host*.json
