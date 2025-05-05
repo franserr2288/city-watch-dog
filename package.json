@@ -18,12 +18,15 @@
   },
   "homepage": "https://github.com/franserr2288/city-watch-dog#readme",
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.149",
     "@types/node": "^22.15.3",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.798.0",
     "@aws-sdk/util-stream-node": "^3.370.0",
-    "pg": "^8.15.6"
+    "@ts-rest/core": "^3.52.1",
+    "pg": "^8.15.6",
+    "zod": "^3.24.3"
   }
 }
