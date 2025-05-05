@@ -1,5 +1,5 @@
 import { initClient, ClientInferRequest } from '@ts-rest/core';
-import { City311ApiContract } from '../api-contracts/city311-api-contract';
+import { City311ApiContract } from './api-contract';
 
 export const city311Client = initClient(City311ApiContract, {
   baseUrl: 'https://data.lacity.org',

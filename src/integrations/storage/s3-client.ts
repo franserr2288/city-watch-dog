@@ -3,10 +3,12 @@ import {
     PutObjectCommand,
     S3Client,
 } from "@aws-sdk/client-s3";
-import { DataSource } from "../../contexts/source-intake/common/sources";
+
 import { Readable } from "stream";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
-import ExtradedDataStorageClient from "./storage-interface";
+import ExtradedDataStorageClient from "./extracted-data-storage-interface";
+import { DataSource } from "../../contexts/source-intake/common/sources";
+
 
 
 
