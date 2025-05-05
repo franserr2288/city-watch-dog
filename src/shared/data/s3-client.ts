@@ -6,9 +6,8 @@ import {
 
 import { Readable } from "stream";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
-import ExtradedDataStorageClient from "./extracted-data-storage-interface";
-import { DataSource } from "../../contexts/source-intake/common/sources";
-
+import { DataSource } from "../../source-intake/config/sources";
+import ExtradedDataStorageClient from "../interfaces/extracted-data-storage-interface";
 
 
 

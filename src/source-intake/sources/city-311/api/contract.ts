@@ -1,6 +1,6 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod'; 
-import { Report311Schema } from './api-schema';
+import { Report311Schema } from './schema';
 
 
 
