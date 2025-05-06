@@ -32,7 +32,7 @@
 
 I structured this project with Clean Architecture/DDD in mind, but with a pragmatic spin. Instead of layering each bounded context in a strict hexagonal pattern (which can get abstract fast), I went with **clear, domain-aligned folders** that are easier to navigate — especially for students or devs who haven’t read architecture books.
 
---
+---
 
 ### 🧱 How Each Bounded Context Is Structured
 
