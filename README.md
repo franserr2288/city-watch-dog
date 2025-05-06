@@ -1,24 +1,78 @@
 # 🏙️ CivicAction Platform (Portfolio Demo)
 
-**CivicAction** is a modular civic tech platform designed to empower communities through data. This repository showcases the **public-facing and architectural components** of the system, built with a focus on real-world structure, serverless architecture, and responsible design.
+**CivicAction** is a modular civic tech platform designed to empower communities through data. This repository showcases the **public-facing and architectural components** of the system.
 
 > ✅ **Portfolio Note:**  
-> This version is a demonstration build intended to highlight technical decision-making, backend architecture, and modular data processing. Some sensitive or potentially abusable features (like automated action dispatchers) are kept private — more info below.
+> This demo showcases my backend and architecture strengths through a civic tech platform built on AWS Lambda, TypeScript, and modular design principles. It reflects real-world decisions around security, scalability, and intuitive code organization.
+
+---
+
+## 📚 Table of Contents
+
+- [🔍 TL;DR](#-tldr)
+- [🧠 Project Architecture](#-project-architecture)
+- [🔧 Technologies Used](#-technologies-used)
+- [🔒 Private Components](#-private-components)
+- [🛡️ License](#-license)
+- [🙌 Author & Intent](#-author--intent)
 
 ---
 
 ## 🔍 TL;DR
 
-- A modular civic data platform designed to process, analyze, and surface local insights (e.g., 311 service data).
-- Uses a real-world, scalable architecture with TypeScript, AWS Lambda, and SAM.
-- Showcases domain-driven design, separation of concerns, and responsible system structuring.
-- Core logic for extractors, report generators, and storage is included — production-tier action systems are kept private.
+- CivicAction processes and analyzes local civic data (e.g., 311 service requests) to produce events that downstream consumers can act on.
+
+- Built with TypeScript + AWS Lambda deployed via SAM IaC
+
+- Includes extractors, signal/event generation, and modular data pipelines — action systems are excluded.
 
 ---
 
 ## 🧠 Project Architecture
 
-This project is structured around **clean architecture principles** — separating domain logic, orchestration, infrastructure, and shared utilities.
+I structured this project with Clean Architecture/DDD in mind, but with a pragmatic spin. Instead of layering each bounded context in a strict hexagonal pattern (which can get abstract fast), I went with **clear, domain-aligned folders** that are easier to navigate — especially for students or devs who haven’t read architecture books.
+
+--
+
+### 🧱 How Each Bounded Context Is Structured
+
+Each major domain (like `source-intake` or `signal-engine`) sticks to a simple pattern:
+
+- **`/interfaces/`** – Shared TypeScript interfaces to define contracts across modules.
+- **`/entrypoints/`** – Where the business logic is exposed to the outside world (Lambda handlers, etc.).
+- **`/modules/`** – All the core domain logic lives here — APIs, extractors, transformations, etc.
+
+Optional folders:
+
+- **`/config/`** – Config and constants scoped to that domain.
+- **`/backfill/`** – One-off scripts to load historical data outside the main daily flow.
+
+---
+
+### 📁 Example: `src/source-intake/`
+
+```bash
+src/source-intake/
+├── backfill/             # One-time data backfill scripts
+│   └── backfill-city-311.ts
+├── config/               # Domain-specific config
+│   └── sources.ts
+├── entrypoints/          # Lambda handler for 311 ingestion
+│   └── city-311/handler.ts
+├── interfaces/           # Contract for extractors
+│   └── extractor-interface.ts
+├── modules/
+│   ├── city-311/
+│   │   ├── api/
+│   │   │   ├── client.ts
+│   │   │   ├── contract.ts
+│   │   │   └── schema.ts
+│   │   └── extractor.ts
+│   └── common/
+│       └── extractor-base.ts
+```
+
+---
 
 ### 🔧 Technologies Used
 
@@ -27,18 +81,6 @@ This project is structured around **clean architecture principles** — separati
 - **Modular project structure**
 - **S3 for versioned data storage**
 - **Event-driven analysis logic**
-
----
-
-## 📁 Included in This Repository
-
-- ✅ Domain-driven code organization (`domains/`)
-- ✅ Data extractors and analysis pipelines (e.g., city-311)
-- ✅ Lambda function handlers (in `entrypoints/`)
-- ✅ Shared utilities for storage and data versioning
-- ✅ Infrastructure as code via AWS SAM (`template.yaml`)
-- ✅ Public-facing interface mockups and UI flows
-- ✅ Architecture-focused documentation and comments
 
 ---
 
@@ -65,5 +107,4 @@ All rights reserved. Please do not reproduce or deploy without explicit permissi
 
 ## 🙌 Author & Intent
 
-Built by Francisco Serrano to demonstrate real-world engineering practices, clean architecture, and a passion for civic technology.  
-This project blends **data, community insight, and modern infrastructure** into a scalable, responsible tool
+Built by Francisco Serrano to demonstrate real-world engineering practices grounded in production experience, with a focus on clean architecture, civic impact, and system sustainability.

@@ -1,6 +1,9 @@
 import { Context, ScheduledEvent } from 'aws-lambda';
 
 export const handler = async (event: ScheduledEvent, context: Context) => {
+    
+
+
 
     return {
         statusCode: 200,

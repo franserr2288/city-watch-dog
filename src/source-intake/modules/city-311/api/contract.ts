@@ -1,15 +1,15 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod'; 
 import { Report311Schema } from './schema';
+import { SOCRATA_SOURCES } from '../../../../shared/api/socrata/constants';
 
-
-
+const { CITY_311 } = SOCRATA_SOURCES.LA_CITY.DATASETS;
 const c = initContract();
 
 export const City311ApiContract = c.router({
   getReports: {
     method: 'GET',
-    path: '/resource/h73f-gn57.json',
+    path: `/resource/${CITY_311}.json`,
 
     query: z.object({
       $limit: z.number().optional(),
@@ -30,7 +30,7 @@ export const City311ApiContract = c.router({
   
   getReportById: {
     method: 'GET',
-    path: '/resource/h73f-gn57.json',
+    path: `/resource/${CITY_311}.json`,
     query: z.object({
       srnumber: z.string(),
     }),
