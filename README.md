@@ -42,7 +42,7 @@ flowchart TD
     SI_S3["S3 Versioned\nBucket"]
   end
 
-  subgraph Signal Engine (Scheduled)
+  subgraph Signal Engine
     SE_Scheduler["Cron Rules\n(hourly / daily)"]
     SE_Handler["Lambda: signal-engine\n(entrypoint)"]
     SE_Analysis["Analysis Modules\n(hourly, daily, etc.)"]
