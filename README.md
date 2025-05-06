@@ -37,21 +37,47 @@ I structured this project with Clean Architecture/DDD in mind, but with a pragma
 ```mermaid
 flowchart TD
   subgraph Source Intake
-    SI_Handler["Lambda: source-intake\n(handler.ts)"]
-    SI_Extractor["Extractor\nmodules/city-311"]
-    SI_S3["S3 Versioned\nBucket"]
+    SI_Handler[
+      Lambda: source-intake
+      (handler.ts)
+    ]
+    SI_Extractor[
+      Extractor
+      modules/city-311
+    ]
+    SI_S3[
+      S3 Versioned
+      Bucket
+    ]
   end
 
-  subgraph Signal Engine
-    SE_Scheduler["Cron Rules\n(hourly / daily)"]
-    SE_Handler["Lambda: signal-engine\n(entrypoint)"]
-    SE_Analysis["Analysis Modules\n(hourly, daily, etc.)"]
-    SE_EventBus["Event Bus\n(SNS / EventBridge)"]
+  subgraph Signal Engine (Scheduled)
+    SE_Scheduler[
+      Cron Rules
+      (hourly / daily)
+    ]
+    SE_Handler[
+      Lambda: signal-engine
+      (entrypoint)
+    ]
+    SE_Analysis[
+      Analysis Modules
+      (hourly, daily, etc.)
+    ]
+    SE_EventBus[
+      Event Bus
+      (SNS / EventBridge)
+    ]
   end
 
   subgraph Action Center
-    AC_Handler["Lambda: action-center\n(handlers…)"]
-    AC_Actions["Action Modules"]
+    AC_Handler[
+      Lambda: action-center
+      (handlers…)
+    ]
+    AC_Actions[
+      Action Modules
+    ]
   end
 
   SI_Handler --> SI_Extractor --> SI_S3
