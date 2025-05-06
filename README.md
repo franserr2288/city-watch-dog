@@ -37,32 +37,26 @@ I structured this project with Clean Architecture/DDD in mind, but with a pragma
 ```mermaid
 flowchart TD
   subgraph Source Intake
-    SI_Handler[Lambda: source-intake<br/>(handler.ts)]
-    SI_Extractor[Extractor<br/>modules/city-311]
-    SI_S3[S3 Versioned Bucket]
+    SI_Handler["Lambda: source-intake\n(handler.ts)"]
+    SI_Extractor["Extractor\nmodules/city-311"]
+    SI_S3["S3 Versioned\nBucket"]
   end
 
   subgraph Signal Engine (Scheduled)
-    SE_Scheduler[Cron Rules<br/>(hourly / daily)]
-    SE_Handler[Lambda: signal-engine<br/>(entrypoint)]
-    SE_Analysis[Analysis Modules<br/>(hourly, daily, etc.)]
-    SE_EventBus[Event Bus<br/>(SNS / EventBridge)]
+    SE_Scheduler["Cron Rules\n(hourly / daily)"]
+    SE_Handler["Lambda: signal-engine\n(entrypoint)"]
+    SE_Analysis["Analysis Modules\n(hourly, daily, etc.)"]
+    SE_EventBus["Event Bus\n(SNS / EventBridge)"]
   end
 
   subgraph Action Center
-    AC_Handler[Lambda: action-center<br/>(handlers…)]
-    AC_Actions[Action Modules]
+    AC_Handler["Lambda: action-center\n(handlers…)"]
+    AC_Actions["Action Modules"]
   end
 
-  SI_Handler -->|fetch + transform| SI_Extractor
-  SI_Extractor -->|store raw data| SI_S3
-
-  SE_Scheduler -->|scheduled invoke| SE_Handler
-  SE_Handler -->|run analysis| SE_Analysis
-  SE_Analysis -->|emit events when needed| SE_EventBus
-
-  SE_EventBus -->|fan-out to queues| AC_Handler
-  AC_Handler --> AC_Actions
+  SI_Handler --> SI_Extractor --> SI_S3
+  SE_Scheduler --> SE_Handler --> SE_Analysis --> SE_EventBus
+  SE_EventBus --> AC_Handler --> AC_Actions
 
 ```
 
