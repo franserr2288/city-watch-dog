@@ -34,8 +34,7 @@ I structured this project with Clean Architecture/DDD in mind, but with a pragma
 
 ### Diagram
 
-```
-mermaid
+```mermaid
 flowchart TD
   subgraph Source Intake
     SI_Handler[Lambda: source-intake<br/>(handler.ts)]
