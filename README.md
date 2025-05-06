@@ -32,60 +32,6 @@
 
 I structured this project with Clean Architecture/DDD in mind, but with a pragmatic spin. Instead of layering each bounded context in a strict hexagonal pattern (which can get abstract fast), I went with **clear, domain-aligned folders** that are easier to navigate — especially for students or devs who haven’t read architecture books.
 
-### Diagram
-
-```mermaid
-flowchart TD
-  subgraph Source Intake
-    SI_Handler[
-      Lambda: source-intake
-      (handler.ts)
-    ]
-    SI_Extractor[
-      Extractor
-      modules/city-311
-    ]
-    SI_S3[
-      S3 Versioned
-      Bucket
-    ]
-  end
-
-  subgraph Signal Engine (Scheduled)
-    SE_Scheduler[
-      Cron Rules
-      (hourly / daily)
-    ]
-    SE_Handler[
-      Lambda: signal-engine
-      (entrypoint)
-    ]
-    SE_Analysis[
-      Analysis Modules
-      (hourly, daily, etc.)
-    ]
-    SE_EventBus[
-      Event Bus
-      (SNS / EventBridge)
-    ]
-  end
-
-  subgraph Action Center
-    AC_Handler[
-      Lambda: action-center
-      (handlers…)
-    ]
-    AC_Actions[
-      Action Modules
-    ]
-  end
-
-  SI_Handler --> SI_Extractor --> SI_S3
-  SE_Scheduler --> SE_Handler --> SE_Analysis --> SE_EventBus
-  SE_EventBus --> AC_Handler --> AC_Actions
-
-```
-
 ### 🧱 How Each Bounded Context Is Structured
 
 Each major domain (like `source-intake` or `signal-engine`) sticks to a simple pattern:
