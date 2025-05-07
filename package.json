@@ -26,6 +26,7 @@
     "@aws-sdk/client-s3": "^3.798.0",
     "@aws-sdk/util-stream-node": "^3.370.0",
     "@ts-rest/core": "^3.52.1",
+    "dotenv": "^16.5.0",
     "pg": "^8.15.6",
     "zod": "^3.24.3"
   }

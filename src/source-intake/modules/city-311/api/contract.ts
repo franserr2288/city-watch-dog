@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod'; 
 import { Report311Schema } from './schema';
-import { SOCRATA_SOURCES } from '../../../../shared/api/socrata/constants';
+import { SOCRATA_SOURCES } from '../../../../shared/api/socrata/data-source-constants';
 
 const { CITY_311 } = SOCRATA_SOURCES.LA_CITY.DATASETS;
 const c = initContract();

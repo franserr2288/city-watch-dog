@@ -1,4 +1,4 @@
 interface IDataExtractor {
     extract(): Promise<any>;
-    store(): Promise<any>;
+    store(data:any): Promise<any>;
   }

@@ -12,7 +12,8 @@ export class SocrataApiClient<T extends z.ZodType> {
   constructor(
     private config: SocrataClientConfig,
     private contract: any,
-    private datasetId: string
+    private datasetId: string,
+    private year : string
   ) {
     this.client = initClient(contract, {
       baseUrl: config.baseUrl,

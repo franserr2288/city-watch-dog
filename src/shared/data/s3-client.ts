@@ -7,14 +7,14 @@ import {
 import { Readable } from "stream";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { DataSource } from "../../source-intake/config/sources";
-import ExtradedDataStorageClient from "../interfaces/extracted-data-storage-interface";
+import ExtradedDataStorageClientInterface from "../interfaces/extracted-data-storage-interface";
 
 
 
 const BUCKET_NAME = process.env.S3_BUCKET_NAME || "city-data";
 const AWS_REGION = process.env.AWS_REGION || 'us-east-1';
 
-export default class S3StorageClient implements ExtradedDataStorageClient{
+export default class S3StorageClient implements ExtradedDataStorageClientInterface{
     private s3: S3Client;
     private bucketName: string; 
 

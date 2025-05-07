@@ -1,14 +1,25 @@
+import ExtradedDataStorageClientInterface from '../../../shared/interfaces/extracted-data-storage-interface';
+import { DataSource } from '../../config/sources';
+import { City311ApiClient } from './api/client';
+
 export default class City311Extractor extends BaseExtractor {
-    protected deriveTableName(url: string): string {
-        return "";
+
+    private datasetApiClient: City311ApiClient;
+    private storageClient: ExtradedDataStorageClientInterface; 
+
+    constructor(
+        datasetApiClient: City311ApiClient,
+        storageClient: ExtradedDataStorageClientInterface
+    ) {
+        super();
+        this.datasetApiClient = datasetApiClient;
+        this.storageClient = storageClient;
     }
-    transform(data: any) {
-        throw new Error("Method not implemented.");
+    async extract(): Promise<any> {
+        const reports = this.datasetApiClient.getReports({});
+        await this.store(reports)
     }
-    extract(): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    store(): Promise<any> {
-        throw new Error("Method not implemented.");
+    async store(data:any): Promise<any> {
+        this.storageClient.storeData(DataSource.Requests311, data);
     } 
 }
