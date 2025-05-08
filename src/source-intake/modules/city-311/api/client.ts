@@ -1,11 +1,11 @@
 import { ClientInferRequest } from '@ts-rest/core';
 import { City311ApiContract } from './contract';
-import { Report311Schema } from './schema';
+import { City311ReportSchema } from './schema';
 import { SocrataApiClient } from '../../../../shared/api/socrata/client';
 import { SOCRATA_SOURCES } from '../../../../shared/api/socrata/data-source-constants';
 import { getEnvVar } from '../../../../shared/config/env-loader';
 
-export class City311ApiClient extends SocrataApiClient<typeof Report311Schema> {
+export class City311ApiClient extends SocrataApiClient<typeof City311ReportSchema> {
   constructor(appToken?:string, resourceId?:string, year?:string) {
     super(
       {

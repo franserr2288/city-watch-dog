@@ -1,7 +1,7 @@
 abstract class BaseExtractor implements IDataExtractor 
 {
-  abstract extract(): Promise<any>;
-  abstract store(data:any): Promise<any>;
+  abstract extract(): Promise<number>;
+  abstract store(data:any): Promise<number>;
 }
 
   

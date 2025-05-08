@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const Report311Schema = z.object({
+export const City311ReportSchema = z.object({
   srnumber: z.string(),
   createddate: z.string(),
   updateddate: z.string().optional(),

@@ -5,7 +5,7 @@ import { City311ApiClient } from './api/client';
 export default class City311Extractor extends BaseExtractor {
 
     private datasetApiClient: City311ApiClient;
-    private storageClient: ExtradedDataStorageClientInterface; 
+    private storageClient: ExtradedDataStorageClientInterface<City311Scehma>; 
 
     constructor(
         datasetApiClient: City311ApiClient,
@@ -15,11 +15,11 @@ export default class City311Extractor extends BaseExtractor {
         this.datasetApiClient = datasetApiClient;
         this.storageClient = storageClient;
     }
-    async extract(): Promise<any> {
+    async extract(): Promise<number> {
         const reports = this.datasetApiClient.getReports({});
         await this.store(reports)
     }
-    async store(data:any): Promise<any> {
-        this.storageClient.storeData(DataSource.Requests311, data);
+    async store(data:any): Promise<number> {
+        return await this.storageClient.storeData(DataSource.Requests311, data);
     } 
 }

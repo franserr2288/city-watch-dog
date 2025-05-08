@@ -7,27 +7,26 @@ import {
 import { Readable } from "stream";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { DataSource } from "../../source-intake/config/sources";
-import ExtradedDataStorageClientInterface from "../interfaces/extracted-data-storage-interface";
+import ExtradedDataStorageClientInterface, { RetrieveDataResponse, StoreDataResponse } from "../interfaces/extracted-data-storage-interface";
+import { getEnvVar } from "../config/env-loader";
+import { BUCKET_REGION } from "./constants";
 
 
 
-const BUCKET_NAME = process.env.S3_BUCKET_NAME || "city-data";
-const AWS_REGION = process.env.AWS_REGION || 'us-east-1';
-
-export default class S3StorageClient implements ExtradedDataStorageClientInterface{
+const BUCKET_NAME = getEnvVar('S3_BUCKET_NAME');
+export default class S3StorageClient<T> implements ExtradedDataStorageClientInterface<T>{
     private s3: S3Client;
     private bucketName: string; 
 
-    constructor(bucketName:string = BUCKET_NAME, region: string = AWS_REGION) {
+    constructor(bucketName:string = BUCKET_NAME, region: string = BUCKET_REGION) {
         this.s3 = new S3Client({region});
         this.bucketName = bucketName;
     }
 
-    async storeData(dataSource: DataSource, data: any): Promise<{ currentKey: string; snapshotKey: string }> { 
-        const key = `${dataSource}-current.json`;
-        const jsonData = JSON.stringify(data, null, 2); 
+    async storeData(dataSource: DataSource, data: any): Promise<StoreDataResponse> { 
+        const jsonData: string = JSON.stringify(data, null, 2); 
         
-        const currentKey = `${dataSource}-current.json`;
+        const currentKey: string = this.getCurrentKey(dataSource);
         const currentCommand = new PutObjectCommand({
             Bucket: this.bucketName,
             Key: currentKey,
@@ -36,7 +35,7 @@ export default class S3StorageClient implements ExtradedDataStorageClientInterfa
         });
 
         const timestamp: string = new Date().toISOString().split("T")[0];
-        const snapshotKey: string = `${dataSource}/${timestamp}.json`;
+        const snapshotKey: string = 
         const snapshotCommand: PutObjectCommand = new PutObjectCommand({
             Bucket: this.bucketName,
             Key: snapshotKey,
@@ -47,19 +46,31 @@ export default class S3StorageClient implements ExtradedDataStorageClientInterfa
         try {
             await this.s3.send(currentCommand);
             await this.s3.send(snapshotCommand);
-            return { currentKey, snapshotKey };
+            return {success: true, currentKey: currentKey, snapshotKey:snapshotKey};
         } catch (error) {
-        console.error(`Error storing ${dataSource} data:`, error);
-        throw error;
+            console.error(`Error storing ${dataSource} data:`, error);
+            return {success: false, errorMessage: `An error occured when storing the dataset ${dataSource} `};
+
         }
     }
 
-    async getCurrentData(source: DataSource): Promise<any> {
-        const key = `${source}-current.json`;
-        return this.getJsonFromS3(key);
+    async getCurrentData(dataSource: DataSource): Promise<RetrieveDataResponse> {
+        try {
+            const key = `${dataSource}-current.json`;
+            const data = this.getJsonFromS3(key);
+        } catch(error) { 
+            return {success: false, errorMessage: `An error occured when retrieving the dataset ${dataSource} `};
+        }
+    }
+
+    getCurrentKey(dataSource:DataSource): string{
+        return `${dataSource}/current.json`;
+    }
+    getTodaySnapshotKey(dataSource:DataSource, timestamp:string): string{
+        return `${dataSource}/archive/${timestamp}.json`;
     }
     
-    async getDataByDate(source: DataSource, date: string): Promise<any> {
+    async getDataByDate(source: DataSource, date: string): Promise<RetrieveDataResponse> {
         const key = `${source}/${date}.json`;
         return this.getJsonFromS3(key);
     }

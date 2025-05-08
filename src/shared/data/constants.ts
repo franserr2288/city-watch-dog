@@ -1,1 +1,1 @@
-export const bucket_region = "us-east-1";
+export const BUCKET_REGION = "us-east-1";

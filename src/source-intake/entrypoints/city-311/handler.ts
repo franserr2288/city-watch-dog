@@ -5,7 +5,8 @@ import { SOCRATA_SOURCES } from '../../../shared/api/socrata/data-source-constan
 import { getEnvVar } from '../../../shared/config/env-loader';
 import ExtradedDataStorageClientInterface from '../../../shared/interfaces/extracted-data-storage-interface';
 import S3StorageClient from '../../../shared/data/s3-client';
-import { bucket_region } from '../../../shared/data/constants';
+import { BUCKET_REGION } from '../../../shared/data/constants';
+import { City311ReportSchema } from '../../modules/city-311/api/schema';
 
 
 export const handler = async (event: ScheduledEvent, context: Context) => {
@@ -16,9 +17,9 @@ export const handler = async (event: ScheduledEvent, context: Context) => {
         SOCRATA_SOURCES.LA_CITY.DATASETS.CITY_311.CURRENT_YEAR.YEAR
     );
 
-    const storageClient: ExtradedDataStorageClientInterface = new S3StorageClient (
+    const storageClient: ExtradedDataStorageClientInterface<typeof City311ReportSchema> = new S3StorageClient (
         getEnvVar('S3_STORAGE_BUCKET_NAME'),
-        bucket_region
+        BUCKET_REGION
     );
     
     const extractor: City311Extractor = new City311Extractor(
