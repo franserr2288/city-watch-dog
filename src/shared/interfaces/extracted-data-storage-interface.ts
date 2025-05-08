@@ -23,6 +23,12 @@ export type StoreDataResponse = StoreDataResponseFailure | StoreDataResponseSucc
 
 interface RetrieveDataResponseSuccess<T> extends BaseResponseSuccess {
     data:T[]
+    metadata: {
+        dataSource: DataSource,
+        time:string,
+        fileName: string,
+        recordCount: number,
+    }
 }
 interface RetrieveDataResponseFailure extends BaseResponseFailure{}
 export type RetrieveDataResponse<T> = RetrieveDataResponseFailure | RetrieveDataResponseSuccess<T>;
