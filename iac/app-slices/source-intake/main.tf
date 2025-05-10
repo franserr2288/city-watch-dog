@@ -1,31 +1,3 @@
-variable "project" {
-  type        = string
-  description = "Project or system name (e.g. los-angeles)"
-}
-
-variable "environment" {
-  type        = string
-  description = "Environment name (e.g. dev, prod)"
-}
-
-variable "bucket_name" {
-  type        = string
-  description = "Shared S3 bucket name to write to"
-}
-
-variable "bucket_arn" {
-  type        = string
-  description = "ARN of the shared bucket"
-}
-
-locals {
-  prefix               = "${var.project}-${var.environment}"
-  function_name        = "${local.prefix}-city-311-source-intake"
-  event_rule_name      = "${local.function_name}-schedule"
-  event_target_id      = "${local.function_name}-target"
-  lambda_role_name     = "${local.function_name}-role"
-}
-
 ##################################
 # IAM Role Scoped To Source-Intake Function
 ##################################

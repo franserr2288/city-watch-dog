@@ -8,6 +8,7 @@ variable "environment" {
   type        = string
 }
 
-locals {
-  prefix = "${var.project}-${var.environment}"
+variable "name" {
+  description = "The logical name of the bucket (e.g. intake, logs)"
+  type        = string
 }
