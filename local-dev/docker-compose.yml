@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  localstack:
+    container_name: "${PROJECT_NAME:-los-angeles-data}-localstack"
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566" # LocalStack Gateway
+      - "4510-4559:4510-4559" # external services port range
+    environment:
+      - DEBUG=${DEBUG:-0}
+      - SERVICES=s3,lambda,dynamodb,logs,events,iam
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_DEFAULT_REGION=us-west-1
+      - LAMBDA_EXECUTOR=docker
+      - LAMBDA_REMOTE_DOCKER=0
+      - LAMBDA_DOCKER_NETWORK=${LAMBDA_DOCKER_NETWORK:-los-angeles-data-network}
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./init-scripts:/etc/localstack/init/ready.d"
+    networks:
+      - los-angeles-data-network
+
+networks:
+  los-angeles-data-network:
+    name: los-angeles-data-network
