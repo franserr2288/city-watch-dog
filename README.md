@@ -20,11 +20,9 @@
 
 ## 🔍 TL;DR
 
-- CivicAction processes and analyzes local civic data (e.g., 311 service requests) to produce events that downstream consumers can act on.
-
-- Built with TypeScript + AWS Lambda deployed via SAM IaC
-
-- Includes extractors, signal/event generation, and modular data pipelines — action systems are excluded.
+- 📥 Ingests civic data (e.g., 311 requests)
+- ⚙️ Built with TypeScript + AWS Lambda + Terraform
+- 🧩 Modular pipelines for event generation
 
 ---
 

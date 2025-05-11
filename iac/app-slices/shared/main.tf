@@ -3,4 +3,5 @@ module "source-intake-s3-storage" {
     project     = var.project
     environment = var.environment
     name = "source-intake"
+    enable_versioning = true
 }
