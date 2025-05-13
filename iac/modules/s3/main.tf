@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "bucket" {
   bucket = "${local.prefix}-${var.name}-${random_id.bucket_suffix.hex}"
   
   tags = {
-    Project     = var.projects
+    Project     = var.project
     Environment = var.environment
     Name        = "${local.prefix}-${var.name}"
   }

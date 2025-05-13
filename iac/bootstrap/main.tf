@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-west-1" 
-}
-
 module "s3-remote-state" {
     source = "../modules/s3"
     project     = var.project
@@ -11,9 +7,8 @@ module "s3-remote-state" {
 }
 
 module "dynamodb-state-lock-table" {
-  source = "./dynamodb_module"
-
-  table_name = "my-awesome-app-data" 
+  source = "../modules/dynamodb"
+  table_name = "terraform-remote-state-lock"
   hash_key   = "item_id"            
 
   attributes = [
@@ -22,9 +17,9 @@ module "dynamodb-state-lock-table" {
 
   global_secondary_indexes = [
     {
-      name            = "user_id-index"
-      hash_key        = "user_id"
-      projection_type = "KEYS_ONLY" # ALL, KEYS_ONLY, or INCLUDE
+      name            = "item_id-index"
+      hash_key        = "item_id"
+      projection_type = "KEYS_ONLY"
     }
   ]
 
