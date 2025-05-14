@@ -28,6 +28,6 @@ Start with a simple Python script against the 311 API to sketch out the data mod
 
 ## Implementation
 
-1. Write a Python script (`fetch_311.py`) to pull JSON from the 311 API
+1. Write a Python script or a notebook to pull JSON from the 311 API
 2. Load into pandas DataFrames and inspect schema
 3. Jot down initial insights and next steps for the service design

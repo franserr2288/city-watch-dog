@@ -5,7 +5,7 @@
 
 ## Context
 
-I considered AWS SAM for IaC, but I want a cloud-agnostic solution to keep options open for future non-AWS environments/just to work with something I get less exposure to.
+I considered AWS SAM for IAC, but I want a cloud-agnostic solution to keep options open for future non-AWS environments/just to work with something I get less exposure to.
 
 ## Decision
 

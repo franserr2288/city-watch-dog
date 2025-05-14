@@ -14,13 +14,13 @@ Use Terraform to bootstrap the state bucket and IAM. After the initial apply, ma
 ## Alternatives Considered
 
 - **Manual console setup:** Quick but not reproducible.
-- **CloudFormation for bootstrap:** Adds another toolchain just for initial resources.
+- **CloudFormation for bootstrap:** Adds another tool chain just for initial resources.
 
 ## Consequences
 
 - **Positive:**
   - Fully repeatable bootstrap in code
-  - Consistent toolchain from day one
+  - Consistent tool chain from day one
 - **Negative:**
   - One manual step to switch `backend.tf` after initial apply
   - Slight risk of drift if backend config isn’t updated immediately

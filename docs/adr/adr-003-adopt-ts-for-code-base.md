@@ -5,7 +5,7 @@
 
 ## Context
 
-I want to get more practice with TypeScript and it’s the natural choice if I build a UI later. Using TS now means I’ll have consistent types end-to-end, and save a migration ADR down the road.
+I want to get more practice with TypeScript, and it’s the natural choice if I build a UI later. Using TS now means I’ll have consistent types end-to-end, and save a migration ADR down the road.
 
 ## Decision
 
