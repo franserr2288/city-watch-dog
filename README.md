@@ -28,15 +28,15 @@
 
 ## 🧠 Project Architecture
 
-I structured this project with Clean Architecture/DDD in mind, but with a pragmatic spin. Instead of layering each bounded context in a strict hexagonal pattern (which can get abstract fast), I went with **clear, domain-aligned folders** that are easier to navigate — especially for students or devs who haven’t read architecture books.
+I structured this project with Clean Architecture/DDD in mind, but with a pragmatic spin. Instead of layering each bounded context in a strict hexagonal pattern, I went with **clear, domain-aligned folders** to lower the barrier to entry for onboarding of others but also to make it more approachable for non-technical stakeholders. Considering this is a civic/community minded project trying to make civic data more accessible, that should be reflected in the project organization and architectural intent.
 
 ### 🧱 How Each Bounded Context Is Structured
 
 Each major domain (like `source-intake` or `signal-engine`) sticks to a simple pattern:
 
-- **`/interfaces/`** – Shared TypeScript interfaces to define contracts across modules.
-- **`/entrypoints/`** – Where the business logic is exposed to the outside world (Lambda handlers, etc.).
-- **`/modules/`** – All the core domain logic lives here — APIs, extractors, transformations, etc.
+- **`/interfaces/`** – Shared TypeScript interfaces
+- **`/entrypoints/`** – Where the business logic is exposed for standardization of deployments
+- **`/modules/`** – All the core domain logic lives here (the "meat" of the domain)
 
 Optional folders:
 

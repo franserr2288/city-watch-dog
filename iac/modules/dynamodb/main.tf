@@ -53,3 +53,5 @@ resource "aws_dynamodb_table" "this" {
   deletion_protection_enabled = true
   tags = var.tags
 }
+
+

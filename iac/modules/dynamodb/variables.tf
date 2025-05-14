@@ -8,11 +8,6 @@ variable "hash_key" {
   type        = string
 }
 
-variable "range_key" {
-  description = "The name of the range key (sort key) for the table."
-  type        = string
-  default     = null
-}
 
 variable "attributes" {
   description = "A list of attribute definitions for the table. This *must* include the hash key, range key (if used), and any attributes used in GSIs."
@@ -21,6 +16,14 @@ variable "attributes" {
     type = string # S (string), N (number), or B (binary)
   }))
 }
+
+# ----------------  OPTIONAL ---------------- 
+variable "range_key" {
+  description = "The name of the range key (sort key) for the table."
+  type        = string
+  default     = null
+}
+
 
 variable "global_secondary_indexes" {
   description = "A list of Global Secondary Indexes (GSIs) for the table. Use this to query on attributes other than the primary key."

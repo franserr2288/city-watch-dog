@@ -8,6 +8,16 @@ variable "bucket_arn" {
   description = "ARN of the shared intake S3 bucket"
 }
 
+variable "metadata_table_arn" {
+  type        = string
+  description = "ARN of the Dynamodb table for metadata"
+}
+variable "metadata_table_name" {
+  type        = string
+  description = "Table name of the Dynamodb table for metadata"
+}
+
+
 variable "project" {
   type        = string
   description = "Project or system name (e.g. los-angeles)"
