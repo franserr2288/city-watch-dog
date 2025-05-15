@@ -9,19 +9,14 @@ module "s3-remote-state" {
 module "dynamodb-state-lock-table" {
   source = "../modules/dynamodb"
   table_name = "terraform-remote-state-lock"
-  hash_key   = "item_id"            
+  hash_key  = "LockID"  
+  range_key = null        
 
   attributes = [
-    { name = "item_id", type = "S" },
+    { name = "LockID", type = "S" }
   ]
 
-  global_secondary_indexes = [
-    {
-      name            = "item_id-index"
-      hash_key        = "item_id"
-      projection_type = "KEYS_ONLY"
-    }
-  ]
+  global_secondary_indexes = []
 
   tags = {
     Project     = "Portfolio"
