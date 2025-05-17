@@ -3,7 +3,8 @@ node_modules/
 npm-debug.log*
 yarn-error.log
 dist/
-build/
+/build/
+/tmp/
 
 # Python
 __pycache__/
