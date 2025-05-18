@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url';
-import buildLambdas from "./build-lambdas.js";
-import deployLambdas from "./deploy-lambdas.js";
-import { getOutputLocation, removeDir } from "./helper.js";
+import buildLambdas from "./build-lambdas";
+import deployLambdas from "./deploy-lambdas";
+import { getOutputLocation, removeDir } from "./helper";
 
 const args = process.argv.slice(2);
 const skipCleanup = args.includes('--skip-cleanup');

@@ -61,3 +61,5 @@ The pipeline expects Lambda functions to follow this structure:
 - Terraform installed and configured
 - AWS credentials configured
 - TypeScript
+
+terraform-infra is the profile that i am using

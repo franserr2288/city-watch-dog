@@ -11,7 +11,7 @@ locals {
 module "city_311_intake" {
   source = "../../modules/lambda"
   name   = local.function_name
-  filename         = "${function_build_base_path}/${local.function_key}-package.zip"
+  filename         = "${local.function_build_base_path}/${local.function_key}-package.zip"
   handler = "handler.default"
   role_arn = module.intake_iam_role.role_arn
 }

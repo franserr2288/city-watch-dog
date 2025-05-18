@@ -8,6 +8,6 @@ module "source_intake" {
   source       = "../../components/source-intake"
   project      = var.project
   environment  = var.environment
-  bucket_name  = module.shared.intake_bucket_name
-  bucket_arn   = module.shared.intake_bucket_arn
+  intake_bucket_arn   = module.shared.source_intake_s3_bucket_arn
+  metadata_table_arn = module.shared.dynamodb_s3_metadata_lookup_table_arn
 }
