@@ -1,7 +1,8 @@
 {
   "name": "los-angeles-data",
   "version": "1.0.0",
-  "description": "This repository contains the **public-facing components** of the CivicAction platform — a modular civic engagement tool designed to empower residents and communities to take informed, localized actions based on data insights.",
+  "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,16 +12,19 @@
     "url": "git+https://github.com/franserr2288/city-watch-dog.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Francisco Javier Serrano",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/franserr2288/city-watch-dog/issues"
-  },
   "homepage": "https://github.com/franserr2288/city-watch-dog#readme",
   "devDependencies": {
+    "@types/archiver": "^6.0.3",
     "@types/aws-lambda": "^8.10.149",
-    "@types/node": "^22.15.3",
-    "typescript": "^5.8.3"
+    "@types/node": "^22.15.18",
+    "archiver": "^7.0.1",
+    "esbuild": "^0.25.4",
+    "glob": "^11.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "zip-dir": "^2.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.798.0",

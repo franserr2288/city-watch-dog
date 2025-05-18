@@ -1,6 +1,8 @@
 locals {
   prefix               = "${var.project}-${var.environment}"
-  function_name        = "${local.prefix}-city-311-source-intake"
+  function_key = "city-311-intake"
+  function_build_base_path = "${path.root}/../../../build/lambdas"
+  function_name        = "${local.prefix}-${local.function_key}"
   event_rule_name      = "${local.function_name}-schedule"
   event_target_id      = "${local.function_name}-target"
   lambda_role_name     = "${local.function_name}-role"
@@ -8,34 +10,21 @@ locals {
 
 module "city_311_intake" {
   source = "../../modules/lambda"
-  name   = "city-311-intake-${local.prefix}"
-
-  inline_statements = [
-    {
-      sid       = "S3PutScoped"
-      actions   = ["s3:PutObject"]
-      resources = ["${var.bucket_arn}/*"]
-    },
-    {
-      sid       = "DynamoReadScoped"
-      actions   = ["dynamodb:GetItem","dynamodb:Query","dynamodb:Scan"]
-      resources = ["${var.metadata_table_arn}"]
-    },
-    {
-    sid       = "DynamoWriteScoped"
-    actions   = [
-      "dynamodb:PutItem",
-      "dynamodb:UpdateItem",
-      "dynamodb:DeleteItem",
-      "dynamodb:BatchWriteItem"
-    ]
-    resources = [
-      "${var.metadata_table_arn}",
-    ]
-  }
-  ]
-
+  name   = local.function_name
+  filename         = "${local.function_build_base_path}/${local.function_key}-package.zip"
+  handler = "handler.default"
+  role_arn = module.intake_iam_role.role_arn
 }
+
+module "intake_iam_role" { 
+  source = "../../modules/iam/lambda-role"
+  dynamodb_table_access = [var.metadata_table_arn]
+  s3_bucket_access = [var.intake_bucket_arn]
+  s3_read_only = false
+  dynamodb_read_only = false
+  role_name = local.lambda_role_name
+}
+
 
 resource "aws_cloudwatch_event_rule" "schedule" {
   name                = local.event_rule_name

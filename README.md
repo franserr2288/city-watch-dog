@@ -78,20 +78,6 @@ src/source-intake/
 
 ---
 
-## 🔒 Private Components (Intentionally Excluded)
-
-Some features are kept in a private submodule for security and ethical reasons:
-
-- ❌ Trigger-action engine (e.g., automatic notifications, emails)
-- ❌ Sensitive deployment configurations
-- ❌ Real-world deployment secrets or keys
-
-If you're a **hiring manager or collaborator** and want to see the full system (including these private components), I'm happy to walk you through it.
-
-📬 Email: **franserr2288@outlook.com**
-
----
-
 ## 🛡️ License
 
 This repository is provided for portfolio and demonstration purposes only.  
@@ -99,6 +85,6 @@ All rights reserved. Please do not reproduce or deploy without explicit permissi
 
 ---
 
-## 🙌 Author & Intent
+## 🙌 Author
 
-Built by Francisco Serrano to demonstrate real-world engineering practices grounded in production experience, with a focus on clean architecture, civic impact, and system sustainability.
+Built by Francisco Serrano
