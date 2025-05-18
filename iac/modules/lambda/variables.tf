@@ -12,6 +12,10 @@ variable "handler" {
   type        = string
   description = "Handler entrypoint, e.g. index.handler"
 }
+variable "role_arn" {
+  type        = string
+  description = "IAM role arn"
+}
 
 # ----------------  OPTIONAL ---------------- 
 variable "runtime" {
@@ -22,7 +26,7 @@ variable "runtime" {
 
 variable "memory_size" {
   type        = number
-  default     = 256
+  default     = 528
   description = "MB of memory for the function."
 }
 variable "timeout" {
@@ -35,20 +39,4 @@ variable "environment" {
   type        = map(string)
   default     = {}
   description = "Environment variables to pass into the Lambda."
-}
-
-variable "policy_arns" {
-  type        = list(string)
-  default     = []
-  description = "Additional policy ARNs to attach beyond AWSLambdaBasicExecutionRole."
-}
-
-variable "inline_statements" {
-  type = list(object({
-    sid       = string
-    actions   = list(string)
-    resources = list(string)
-  }))
-  default = []
-  description = "Custom inline policy statements (e.g. scoped S3 / Dynamo)"
 }

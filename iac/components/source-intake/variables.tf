@@ -3,7 +3,7 @@ variable "bucket_name" {
   description = "Name of the shared intake S3 bucket"
 }
 
-variable "bucket_arn" {
+variable "intake_bucket_arn" {
   type        = string
   description = "ARN of the shared intake S3 bucket"
 }
