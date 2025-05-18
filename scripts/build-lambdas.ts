@@ -1,12 +1,13 @@
 import { glob } from 'glob';
 import esbuild from "esbuild";
 import path from 'node:path';
-import { basename, dirname, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import zipdir from 'zip-dir';
-import { removeDir,  outputLambdaDir,  ensureDir, getOutputLocation, getOutputFilePath, getEntryPointName } from './shared.ts';
+import { removeDir,  outputLambdaDir,  ensureDir, getOutputLocation, getOutputFilePath, getEntryPointName, getLambdaEntrypoints } from './helper.ts';
+import { fileURLToPath } from 'node:url';
 
 
-async function buildLambdas() {
+export default async function buildLambdas() {
   try {
     const tempLambdaDir = resolve(process.cwd(), 'tmp', 'lambdas');
     const tempDir = resolve(process.cwd(), 'tmp');
@@ -17,12 +18,12 @@ async function buildLambdas() {
     await ensureDir(tempLambdaDir);
     await ensureDir(outputLambdaDir);
     
-    const entrypoints = await glob('src/**/entrypoints/*/handler.ts');
+    const entrypoints =  getLambdaEntrypoints();
     console.log(`Found ${entrypoints.length} Lambda entrypoints`);
     
     await Promise.all(entrypoints.map(async (entryPoint) => {
       const entrypointName = getEntryPointName(entryPoint);
-      
+
       const lambdaTempDir = path.join(tempLambdaDir, entrypointName);
       const lambdaoutputLambdaDir = getOutputLocation(entrypointName);
 
@@ -55,4 +56,8 @@ async function buildLambdas() {
   }
 }
 
-await buildLambdas();
+const isRunningDirectly = process.argv[1] === fileURLToPath(import.meta.url);
+
+if (isRunningDirectly) {
+  buildLambdas();
+}
