@@ -3,8 +3,7 @@ import esbuild from "esbuild";
 import path from 'node:path';
 import { basename, dirname, resolve } from 'node:path';
 import zipdir from 'zip-dir';
-import { rm, mkdir } from 'fs/promises';
-import { ensureDir, outputLambdaDir, removeDir } from './shared.js';
+import { removeDir,  outputLambdaDir,  ensureDir, getOutputLocation, getOutputFilePath, getEntryPointName } from './shared.ts';
 
 
 async function buildLambdas() {
@@ -22,11 +21,11 @@ async function buildLambdas() {
     console.log(`Found ${entrypoints.length} Lambda entrypoints`);
     
     await Promise.all(entrypoints.map(async (entryPoint) => {
-      const parentDir = dirname(entryPoint);
-      const entrypointName = basename(parentDir);
+      const entrypointName = getEntryPointName(entryPoint);
       
       const lambdaTempDir = path.join(tempLambdaDir, entrypointName);
-      const lambdaoutputLambdaDir = path.join(outputLambdaDir, entrypointName);
+      const lambdaoutputLambdaDir = getOutputLocation(entrypointName);
+
       await ensureDir(lambdaTempDir);
       await ensureDir(lambdaoutputLambdaDir);
       
@@ -40,10 +39,10 @@ async function buildLambdas() {
         target: 'node18',
         outfile: outputFile,
         minify: true,
-        external: ['aws-sdk'],
+        external: ['aws-sdk', "aws-lambda"],
       });
       
-      const zipPath = path.join(lambdaoutputLambdaDir, `${entrypointName}-package.zip`);
+      const zipPath = getOutputFilePath(entrypointName);
       await zipdir(lambdaTempDir, { saveTo: zipPath });
       console.log(`Successfully packaged ${entrypointName}`);
     }));

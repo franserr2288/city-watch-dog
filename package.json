@@ -12,11 +12,8 @@
     "url": "git+https://github.com/franserr2288/city-watch-dog.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Francisco Javier Serrano",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/franserr2288/city-watch-dog/issues"
-  },
   "homepage": "https://github.com/franserr2288/city-watch-dog#readme",
   "devDependencies": {
     "@types/archiver": "^6.0.3",

@@ -1,5 +1,5 @@
 import { rm, mkdir } from 'fs/promises';
-import { resolve } from 'path';
+import path, { basename, dirname, resolve } from 'path';
 
 export async function removeDir(dirPath: string) {
   try {
@@ -20,6 +20,19 @@ export async function ensureDir(dirPath: string) {
   }
 }
 
-
-
 export const outputLambdaDir = resolve(process.cwd(), 'build', 'lambdas');
+
+export function getOutputLocation(entrypointName:string ): string {
+    return path.join(outputLambdaDir, entrypointName);
+}
+
+export function getOutputFilePath(entrypointName:string ): string {
+    return path.join(getOutputLocation(entrypointName), `${entrypointName}-package.zip`);
+}
+
+
+
+export function getEntryPointName(entrypoint:string): string {
+    const parentDir = dirname(entrypoint);
+    return basename(parentDir);
+}
