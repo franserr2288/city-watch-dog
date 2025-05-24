@@ -51,9 +51,8 @@ src/source-intake/
 ### 🔧 Technologies Used
 
 - **TypeScript**
-- **AWS Lambda (SAM)**
+- **AWS Lambda**
 - **Modular project structure**
-- **S3 for versioned data storage**
 - **Event-driven analysis logic**
 
 ---
