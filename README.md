@@ -1,24 +1,12 @@
-# 🏙️ CivicAction Platform (Portfolio Demo)
+# LA WATCH DOG
 
-**CivicAction** is a modular civic tech platform designed to empower communities through data. This repository showcases the **public-facing and architectural components** of the system.
+This project is my attempt at making open data useful instead of only living in CSV graveyards. Open data platforms are useful, but don't offer substantive insights.
 
-> ✅ **Portfolio Note:**  
-> This demo showcases my backend and architecture strengths through a civic tech platform built on AWS Lambda, TypeScript, and modular design principles. It reflects real-world decisions around security, scalability, and intuitive code organization.
-
----
-
-## 📚 Table of Contents
-
-- [🔍 TL;DR](#-tldr)
-- [🧠 Project Architecture](#-project-architecture)
-- [🔧 Technologies Used](#-technologies-used)
-- [🔒 Private Components](#-private-components)
-- [🛡️ License](#-license)
-- [🙌 Author & Intent](#-author--intent)
+I built this to create signals (like unfixed potholes beyond the legal time limit). You can't have scalable, actionable systems without domain events for civic data stores.
 
 ---
 
-## 🔍 TL;DR
+## SUMMARY
 
 - 📥 Ingests civic data (e.g., 311 requests)
 - ⚙️ Built with TypeScript + AWS Lambda + Terraform
@@ -26,35 +14,27 @@
 
 ---
 
-## 🧠 Project Architecture
+## PROJECT ARCHITECTURE
 
-I structured this project with Clean Architecture/DDD in mind, but with a pragmatic spin. Instead of layering each bounded context in a strict hexagonal pattern, I went with **clear, domain-aligned folders** to lower the barrier to entry for onboarding of others but also to make it more approachable for non-technical stakeholders. Considering this is a civic/community minded project trying to make civic data more accessible, that should be reflected in the project organization and architectural intent.
+### Bounded context organization
 
-### 🧱 How Each Bounded Context Is Structured
+Each domain (like `source-intake` or `signal-engine`) follows this structure :
 
-Each major domain (like `source-intake` or `signal-engine`) sticks to a simple pattern:
+- **`/entrypoints/`** – Deployable units
+- **`/modules/`** – Domain logic
 
-- **`/interfaces/`** – Shared TypeScript interfaces
-- **`/entrypoints/`** – Where the business logic is exposed for standardization of deployments
-- **`/modules/`** – All the core domain logic lives here (the "meat" of the domain)
-
-Optional folders:
+Optional folder(s):
 
 - **`/config/`** – Config and constants scoped to that domain.
-- **`/backfill/`** – One-off scripts to load historical data outside the main daily flow.
 
 ### 📁 Example: `src/source-intake/`
 
 ```bash
 src/source-intake/
-├── backfill/             # One-time data backfill scripts
-│   └── backfill-city-311.ts
 ├── config/               # Domain-specific config
 │   └── sources.ts
 ├── entrypoints/          # Lambda handler for 311 ingestion
 │   └── city-311/handler.ts
-├── interfaces/           # Contract for extractors
-│   └── extractor-interface.ts
 ├── modules/
 │   ├── city-311/
 │   │   ├── api/
@@ -78,13 +58,44 @@ src/source-intake/
 
 ---
 
-## 🛡️ License
+## DATA FLOW
 
-This repository is provided for portfolio and demonstration purposes only.  
-All rights reserved. Please do not reproduce or deploy without explicit permission. See `LICENSE.txt` for full terms.
+The system operates in layers to ensure data integrity and accountability:
+
+### 1. Daily Snapshots (Historical Ledger)
+
+- Pulls complete dataset from 311 API → S3 daily snapshots
+- Creates an immutable audit trail of data state over time
+- Enables detection of deleted/modified records (e.g., for legal accountability)
+
+### 2. Backfill Layer
+
+- One-time historical ingestion from API → DynamoDB
+- Processes records in batches from earliest available date
+- Publishes completion checkpoint to Parameter Store
+
+### 3. Change Detection Layer
+
+- Reads last processed date from Parameter Store
+- Ingests new records and updates to existing ones
+- Maintains current state in DynamoDB for analysis
+
+### 4. Signal Engine (Analysis Layer)
+
+- Run queries against DynamoDB to generate civic insights
+- Emits events for downstream consumers
+- Examples: overdue repairs, response time disparities, service request patterns
 
 ---
 
-## 🙌 Author
+## LICENSE
 
-Built by Francisco Serrano
+This project is shared for portfolio purposes. See LICENSE.txt for details.
+
+---
+
+## WHY I BUILT THIS
+
+Built by Francisco Serrano. I was born and raised in the greater Los Angeles area, here I did my undergrad and gained my first professional experiences. I was involved in community work throughout HS, but that took a backseat during my college years. Once I finished undergrad, I realized my professional skills were the most valuable thing I could offer my community.
+
+My initial project ideas were interesting downstream consumer applications, but I realized they'd just be UI wrappers over raw data endpoints. To get substantive insights - like potholes outstanding beyond legal limits, or disparities in response times between neighborhoods - each app would need complex queries and analysis. Instead of having every consumer re-implement this (and blowing up the API in the process), I built infrastructure that computes these insights once and emits them as events. Build once and everyone gets to eat.
