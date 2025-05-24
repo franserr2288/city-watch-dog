@@ -51,9 +51,8 @@ src/source-intake/
 ### 🔧 Technologies Used
 
 - **TypeScript**
-- **AWS Lambda**
-- **Modular project structure**
-- **Event-driven analysis logic**
+- **Terraform**
+- **AWS: Lambda, DynamoDB, S3, SNS**
 
 ---
 
