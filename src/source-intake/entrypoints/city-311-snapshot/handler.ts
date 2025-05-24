@@ -1,4 +1,4 @@
-import { SOCRATA_SOURCES } from '#shared/clients/socrata/data-source-constants.ts';
+import { SOCRATA_SOURCES } from '#shared/clients/gov-data/data-source-constants.ts';
 import { BUCKET_REGION } from '#shared/clients/storage/constants.ts';
 import S3StorageClient from '#shared/clients/storage/blob-client.ts';
 import { getEnvVar } from '#shared/config/env-loader.ts';

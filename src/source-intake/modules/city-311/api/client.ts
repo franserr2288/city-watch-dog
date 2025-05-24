@@ -1,7 +1,7 @@
 import { City311ApiContract } from './contract.ts';
 import City311ReportSchema from './schema.ts';
-import { SocrataApiClient } from '#shared/clients/socrata/client.ts';
-import { SOCRATA_SOURCES } from '../../../../shared/clients/socrata/data-source-constants.ts';
+import { SocrataApiClient } from '#shared/clients/gov-data/socrata-client.ts';
+import { SOCRATA_SOURCES } from '../../../../shared/clients/gov-data/data-source-constants.ts';
 import { getEnvVar } from '../../../../shared/config/env-loader.ts';
 
 export class City311ApiClient extends SocrataApiClient<

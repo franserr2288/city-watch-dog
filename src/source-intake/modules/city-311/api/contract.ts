@@ -1,4 +1,4 @@
-import { SOCRATA_SOURCES } from '#shared/clients/socrata/data-source-constants.ts';
+import { SOCRATA_SOURCES } from '#shared/clients/gov-data/data-source-constants.ts';
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 import City311ReportSchema from './schema.ts';
