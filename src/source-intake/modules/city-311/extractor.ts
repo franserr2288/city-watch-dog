@@ -21,7 +21,8 @@ export default class City311Extractor
   }
 
   async extract(): Promise<Array<typeof City311ReportSchema>> {
-    const reports = this.socrataApiClient.getReports({});
+    const reports = await this.socrataApiClient.getReports({});
+    console.log(reports);
     await this.store(reports);
     return reports;
   }

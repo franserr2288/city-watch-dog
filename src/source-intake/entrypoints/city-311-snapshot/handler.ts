@@ -13,7 +13,7 @@ export default async function handler(event, context): Promise<void> {
     console.log(`EXCECUTION CONTEXT ${context}`);
 
     const city311client: City311ApiClient = new City311ApiClient(
-      getEnvVar('SOCRATA_API_KEY_SECRET'),
+      getEnvVar('SOCRATA_APP_TOKEN'),
       SOCRATA_SOURCES.LA_CITY.DATASETS.CITY_311.CURRENT_YEAR.RESOURCE_ID,
       SOCRATA_SOURCES.LA_CITY.DATASETS.CITY_311.CURRENT_YEAR.YEAR,
     );

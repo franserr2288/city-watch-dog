@@ -3,7 +3,7 @@ import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 import City311ReportSchema from './schema.ts';
 
-const { CITY_311 } = SOCRATA_SOURCES.LA_CITY.DATASETS;
+const CITY_311 = SOCRATA_SOURCES.LA_CITY.DATASETS.CITY_311.CURRENT_YEAR.RESOURCE_ID;
 const c = initContract();
 
 export const City311ApiContract = c.router({
