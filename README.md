@@ -88,14 +88,16 @@ The system operates in layers to ensure data integrity and accountability:
 
 ---
 
-## LICENSE
-
-This project is shared for portfolio purposes. See LICENSE.txt for details.
-
----
-
 ## WHY I BUILT THIS
 
 Built by Francisco Serrano. I was born and raised in the greater Los Angeles area, here I did my undergrad and gained my first professional experiences. I was involved in community work throughout HS, but that took a backseat during my college years. Once I finished undergrad, I realized my professional skills were the most valuable thing I could offer my community.
 
 My initial project ideas were interesting downstream consumer applications, but I realized they'd just be UI wrappers over raw data endpoints. To get substantive insights - like potholes outstanding beyond legal limits, or disparities in response times between neighborhoods - each app would need complex queries and analysis. Instead of having every consumer re-implement this (and blowing up the API in the process), I built infrastructure that computes these insights once and emits them as events. Build once and everyone gets to eat.
+
+---
+
+## LICENSE
+
+This project is shared for portfolio purposes. See LICENSE.txt for details.
+
+---
