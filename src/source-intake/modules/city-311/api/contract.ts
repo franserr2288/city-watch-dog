@@ -1,7 +1,7 @@
+import { SOCRATA_SOURCES } from '#shared/clients/socrata/data-source-constants.ts';
 import { initContract } from '@ts-rest/core';
-import { z } from 'zod'; 
-import { City311ReportSchema } from './schema';
-import { SOCRATA_SOURCES } from '../../../../shared/api/socrata/data-source-constants';
+import { z } from 'zod';
+import City311ReportSchema from './schema.ts';
 
 const { CITY_311 } = SOCRATA_SOURCES.LA_CITY.DATASETS;
 const c = initContract();
@@ -27,7 +27,7 @@ export const City311ApiContract = c.router({
       500: z.object({ error: z.string() }),
     },
   },
-  
+
   getReportById: {
     method: 'GET',
     path: `/resource/${CITY_311}.json`,

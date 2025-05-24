@@ -1,3 +1,3 @@
 export enum DataSource {
-    Requests311 = '311-requests'
+  Requests311 = 'city-311',
 }

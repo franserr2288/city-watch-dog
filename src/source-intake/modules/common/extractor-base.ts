@@ -1,7 +1,6 @@
-abstract class BaseExtractor implements IDataExtractor 
-{
-  abstract extract(): Promise<number>;
-  abstract store(data:any): Promise<number>;
-}
+import type { IDataExtractor } from './extractor.types';
 
-  
+export abstract class BaseExtractor<T> implements IDataExtractor<T> {
+  abstract extract(): Promise<T[]>;
+  abstract store(data: T[]): Promise<boolean>;
+}

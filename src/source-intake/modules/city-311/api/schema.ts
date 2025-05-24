@@ -1,6 +1,6 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export const City311ReportSchema = z.object({
+const City311ReportSchema = z.object({
   srnumber: z.string(),
   createddate: z.string(),
   updateddate: z.string().optional(),
@@ -13,3 +13,5 @@ export const City311ReportSchema = z.object({
   latitude: z.string().optional(),
   longitude: z.string().optional(),
 });
+
+export default City311ReportSchema;

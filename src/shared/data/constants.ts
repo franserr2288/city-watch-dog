@@ -1,1 +1,0 @@
-export const BUCKET_REGION = "us-east-1";

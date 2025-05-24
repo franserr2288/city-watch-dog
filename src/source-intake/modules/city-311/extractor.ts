@@ -1,26 +1,32 @@
-import  { ExtractedDataWriterInterface } from '../../../shared/interfaces/extracted-data-storage-interfaces';
-import { DataSource } from '../../config/sources';
-import { City311ApiClient } from './api/client';
-import { City311ReportSchema } from './api/schema';
+import type { ExtractedDataWriterInterface } from '#shared/types/extracted-data-storage-interfaces.ts';
+import { DataSource } from '#source-intake/config/sources.ts';
+import type { BaseExtractor } from '../common/extractor-base.ts';
+import type { City311ApiClient } from './api/client.ts';
+import type City311ReportSchema from './api/schema.ts';
 
-export default class City311Extractor extends BaseExtractor {
+export default class City311Extractor
+  implements BaseExtractor<typeof City311ReportSchema>
+{
+  private socrataApiClient: City311ApiClient;
+  private storageClient: ExtractedDataWriterInterface<
+    typeof City311ReportSchema
+  >;
 
-    private datasetApiClient: City311ApiClient;
-    private storageClient: ExtractedDataWriterInterface<typeof City311ReportSchema>; 
+  constructor(
+    datasetApiClient: City311ApiClient,
+    storageClient: ExtractedDataWriterInterface<typeof City311ReportSchema>,
+  ) {
+    this.socrataApiClient = datasetApiClient;
+    this.storageClient = storageClient;
+  }
 
-    constructor(
-        datasetApiClient: City311ApiClient,
-        storageClient: ExtractedDataWriterInterface<typeof City311ReportSchema>
-    ) {
-        super();
-        this.datasetApiClient = datasetApiClient;
-        this.storageClient = storageClient;
-    }
-    async extract(): Promise<any> {
-        const reports = this.datasetApiClient.getReports({});
-        await this.store(reports)
-    }
-    async store(data:any): Promise<any> {
-        return await this.storageClient.storeData(DataSource.Requests311, data);
-    } 
+  async extract(): Promise<Array<typeof City311ReportSchema>> {
+    const reports = this.socrataApiClient.getReports({});
+    await this.store(reports);
+    return reports;
+  }
+
+  async store(data: Promise<Array<typeof City311ReportSchema>>): Promise<void> {
+    await this.storageClient.storeData(DataSource.Requests311, data);
+  }
 }
