@@ -1,17 +1,17 @@
 locals {
   prefix               = "${var.project}-${var.environment}"
-  function_key = "city-311-intake"
+  snapshot_function_key = "city-311-snapshot"
   function_build_base_path = "${path.root}/../../../build/lambdas"
-  function_name        = "${local.prefix}-${local.function_key}"
-  event_rule_name      = "${local.function_name}-schedule"
-  event_target_id      = "${local.function_name}-target"
-  lambda_role_name     = "${local.function_name}-role"
+  snapshot_function_name        = "${local.prefix}-${local.snapshot_function_key}"
+  event_rule_name      = "${local.snapshot_function_name}-schedule"
+  event_target_id      = "${local.snapshot_function_name}-target"
+  lambda_role_name     = "${local.snapshot_function_name}-role"
 }
 
 module "city_311_intake" {
   source = "../../modules/lambda"
-  name   = local.function_name
-  filename         = "${local.function_build_base_path}/${local.function_key}-package.zip"
+  name   = local.snapshot_function_name
+  filename         = "${local.function_build_base_path}/${local.snapshot_function_key}-package.zip"
   handler = "handler.default"
   role_arn = module.intake_iam_role.role_arn
 }
