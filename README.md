@@ -1,22 +1,41 @@
 # LA WATCH DOG
 
-This project is my attempt at making open data useful instead of only living in CSV graveyards. Open data platforms are useful, but don't offer substantive insights.
-
-I built this to create signals (like unfixed potholes beyond the legal time limit). You can't have scalable, actionable systems without domain events for civic data stores.
+Open data is often wasted. We need domain events to make it actionable.
 
 ---
 
-## SUMMARY
+## WHAT DOES THIS SOLVE?
 
-- 📥 Ingests civic data (e.g., 311 requests)
-- ⚙️ Built with TypeScript + AWS Lambda + Terraform
-- 🧩 Modular pipelines for event generation
+LA, like many cities, publishes thousands of 311 service requests daily, but raw data dumps are like having concerts in an empty hall... the people can't hear you.
 
----
+This system:
 
-## PROJECT ARCHITECTURE
+- Tracks accountability: Identifies overdue repairs beyond legal time limits
+- Reveals patterns: Spots response time disparities across neighborhoods
+- Enables automation: Provides clean data feeds for apps, research, and advocacy
+- Maintains history: Preserves records even if the city modifies or deletes them
 
-### Bounded context organization
+## How It Works
+
+**Data Pipeline**
+
+1. Daily Snapshots → Complete 311 API data pulled daily to S3, creating an immutable audit trail
+2. Change Detection → Identifies new records and updates to existing ones, maintains current state in DynamoDB
+3. Signal Engine → Runs queries to generate civic insights and emit events for downstream use
+4. Historical Backfill → One-time ingestion of historical records
+
+**Why This Architecture**
+Rather than forcing every civic app to re-implement data processing (and potentially overwhelm the city's API), this centralizes the heavy lifting once.
+
+## For Developers
+
+### Tech Stack
+
+TypeScript - Type safety for complex data transformations
+AWS Lambda + DynamoDB + S3 + SNS - Serverless for operational simplicity
+Terraform - Infrastructure as code for reproducible deployments
+
+### Project Structure
 
 Each domain (like `source-intake` or `signal-engine`) follows this structure :
 
@@ -27,7 +46,7 @@ Optional folder(s):
 
 - **`/config/`** – Config and constants scoped to that domain.
 
-### 📁 Example: `src/source-intake/`
+Example: `src/source-intake/`
 
 ```bash
 src/source-intake/
@@ -46,56 +65,24 @@ src/source-intake/
 │       └── extractor-base.ts
 ```
 
----
+### Developer Notes
 
-### 🔧 Technologies Used
+**Why Serverless?** Development velocity and no infrastructure management overhead for a portfolio project
 
-- **TypeScript**
-- **Terraform**
-- **AWS: Lambda, DynamoDB, S3, SNS**
+**Why TypeScript?** Building toward React frontends, wanted end-to-end type safety
 
----
+**Why Terraform?** Wanted non-AWS-native IaC experience beyond work's SAM exposure
 
-## DATA FLOW
+**Why LA 311?** I'm a local, it's an accessible dataset, politically neutral public services, and familiar domain concepts.
 
-The system operates in layers to ensure data integrity and accountability:
+## Background & Motivation
 
-### 1. Daily Snapshots (Historical Ledger)
+Born and raised in LA, I noticed how open data open became background noise with no real uses for it. After doing community work in high school and building technical skills in college/work, I realized I could lay the foundation for other projects I was interested in.
 
-- Pulls complete dataset from 311 API → S3 daily snapshots
-- Creates an immutable audit trail of data state over time
-- Enables detection of deleted/modified records (e.g., for legal accountability)
+Initial ideas focused on consumer applications, but they would have been doomed to be generic UI wrappers without real insights. Displaying data isn't a hard thing to do - the complexity lies in processing it into actionable intelligence.
 
-### 2. Backfill Layer
-
-- One-time historical ingestion from API → DynamoDB
-- Processes records in batches from earliest available date
-- Publishes completion checkpoint to Parameter Store
-
-### 3. Change Detection Layer
-
-- Reads last processed date from Parameter Store
-- Ingests new records and updates to existing ones
-- Maintains current state in DynamoDB for analysis
-
-### 4. Signal Engine (Analysis Layer)
-
-- Run queries against DynamoDB to generate civic insights
-- Emits events for downstream consumers
-- Examples: overdue repairs, response time disparities, service request patterns
-
----
-
-## WHY I BUILT THIS
-
-Built by Francisco Serrano. I was born and raised in the greater Los Angeles area, here I did my undergrad and gained my first professional experiences. I was involved in community work throughout HS, but that took a backseat during my college years. Once I finished undergrad, I realized my professional skills were the most valuable thing I could offer my community.
-
-My initial project ideas were interesting downstream consumer applications, but I realized they'd just be UI wrappers over raw data endpoints. To get substantive insights - like potholes outstanding beyond legal limits, or disparities in response times between neighborhoods - each app would need complex queries and analysis. Instead of having every consumer re-implement this (and blowing up the API in the process), I built infrastructure that computes these insights once and emits them as events. Build once and everyone gets to eat.
-
----
+This infrastructure solves that problem once, enabling multiple downstream applications without rebuilding the same analysis layer.
 
 ## LICENSE
 
 This project is shared for portfolio purposes. See LICENSE.txt for details.
-
----
