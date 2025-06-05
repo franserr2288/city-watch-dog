@@ -1,45 +1,83 @@
 import { getEnvVar } from 'src/lib/config/env-loader';
 import {
-  BatchWriteItemCommand,
-  DynamoDBClient,
+  DynamoDB,
+  type BatchWriteItemCommandOutput,
 } from '@aws-sdk/client-dynamodb';
-import { marshall } from '@aws-sdk/util-dynamodb';
-import type { DataSource } from 'src/lib/constants/socrata-constants';
 
-export default class WatchdogTableStorageClient<T> {
+import {
+  DynamoDBDocumentClient,
+  BatchWriteCommand,
+  type BatchWriteCommandInput,
+} from '@aws-sdk/lib-dynamodb';
+
+export default class WatchdogTableStorageClient<TDataType> {
+  private dynamodb: DynamoDBDocumentClient;
   constructor(
-    private tableName: string = getEnvVar('INTAKE_TABLE'),
+    private tableName: string,
     private region: string = getEnvVar('INFRA_REGION'),
-    private dynamodb: DynamoDBClient,
+    ddbClient?: DynamoDB,
   ) {
-    this.dynamodb = dynamodb ?? new DynamoDBClient({ region });
+    const client = ddbClient ?? new DynamoDB({ region: this.region });
+    const docClient = DynamoDBDocumentClient.from(client, {
+      marshallOptions: {
+        convertClassInstanceToMap: true,
+        convertEmptyValues: false,
+        removeUndefinedValues: true,
+      },
+    });
+    this.dynamodb = docClient;
   }
 
-  public async storeData(dataSource: DataSource, data: T[]): Promise<void> {
-    const chunks = this.chunkArray(data, 25);
+  public async storeData(data: TDataType[]): Promise<void> {
+    if (!data.length) {
+      return;
+    }
 
-    for (const chunk of chunks) {
-      const putRequests = chunk.map((report) => ({
-        PutRequest: {
-          Item: marshall(report),
-        },
-      }));
+    const putRequests = data.map((i) => ({
+      PutRequest: { Item: i },
+    }));
+    const chunkedPutRequests = chunkArray(putRequests, 25);
+    for (const chunkPutRequests of chunkedPutRequests) {
+      await this.batchWriteWithRetry(chunkPutRequests);
+    }
+  }
 
-      const command = new BatchWriteItemCommand({
+  private async batchWriteWithRetry(
+    writeRequests,
+    maxRetries = 5,
+  ): Promise<void> {
+    let attempts = 0;
+    let unprocessed: BatchWriteItemCommandOutput['UnprocessedItems'] = {};
+    let currentRequests = writeRequests;
+
+    while (currentRequests.length > 0) {
+      const params: BatchWriteCommandInput = {
         RequestItems: {
-          [this.tableName]: putRequests,
+          [this.tableName]: currentRequests,
         },
-      });
+      };
 
-      await this.dynamodb.send(command);
+      const response = await this.dynamodb.send(new BatchWriteCommand(params));
+      unprocessed = response.UnprocessedItems || {};
+      const hasUnprocessed = (unprocessed[this.tableName]?.length ?? 0) > 0;
+
+      if (!hasUnprocessed) return;
+
+      attempts++;
+      if (attempts > maxRetries) {
+        throw new Error(
+          `Exceeded maxRetries (${maxRetries}); ${unprocessed[this.tableName].length} item(s) remain unprocessed.`,
+        );
+      }
+      currentRequests = unprocessed[this.tableName]!;
     }
   }
+}
 
-  private chunkArray<T>(array: T[], size: number): T[][] {
-    const chunks: T[][] = [];
-    for (let i = 0; i < array.length; i += size) {
-      chunks.push(array.slice(i, i + size));
-    }
-    return chunks;
+function chunkArray<T>(arr: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    chunks.push(arr.slice(i, i + size));
   }
+  return chunks;
 }
