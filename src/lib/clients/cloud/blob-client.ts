@@ -5,12 +5,32 @@ import {
   PutObjectCommand,
   GetObjectCommand,
 } from '@aws-sdk/client-s3';
-import { sdkStreamMixin } from '@aws-sdk/util-stream-node';
-import type { Readable } from 'stream';
-
+import { Upload } from '@aws-sdk/lib-storage';
+import { PassThrough, Readable } from 'stream';
+import * as zlib from 'zlib';
+import JSONStream from 'JSONStream';
 const BUCKET_REGION = getEnvVar('INFRA_REGION');
-const BUCKET_NAME = getEnvVar('S3_BUCKET_NAME');
-export default class WatchdogBlobStorageClient<T> {
+const BUCKET_NAME = getEnvVar('DAILY_SNAPSHOT_BUCKET');
+
+interface StreamingStorageOptions<T> {
+  dataGenerator: AsyncGenerator<T[], void, unknown>;
+  compress?: boolean;
+  batchSize?: number;
+}
+interface SnapshotPayload<T> {
+  metadata: {
+    dataSource: string;
+    fileName: string;
+    time: string;
+    recordCount: string;
+  };
+  data: T[];
+}
+// interface SnapshotPayload<T> extends SnapshotMetadata {
+//   data: T[];
+// }
+
+export default class BlobStorageClient<T> {
   private s3: S3Client;
   private bucketName: string;
 
@@ -23,7 +43,10 @@ export default class WatchdogBlobStorageClient<T> {
     this.bucketName = bucketName;
   }
 
-  async storeData(dataSource: DataSource, data: T[]): Promise<object> {
+  public async storeSmallDataSet(
+    dataSource: DataSource,
+    data: T[],
+  ): Promise<object> {
     const { date, iso, safeTimestamp } = this.getTimestamps();
     const payload = {
       metadata: {
@@ -69,39 +92,163 @@ export default class WatchdogBlobStorageClient<T> {
     }
   }
 
-  async getCurrentData(dataSource: DataSource) {
+  async streamData(
+    dataSource: DataSource,
+    options: StreamingStorageOptions<T>,
+  ): Promise<object> {
+    const { dataGenerator, compress = true } = options;
+    const { date, iso, safeTimestamp } = this.getTimestamps();
+
+    const currentKey = this.getCurrentKey(dataSource);
+    const snapshotKey = this.getDatedSnapshotKey(dataSource, date);
+
+    try {
+      const [currentResult] = await Promise.all([
+        this.streamToS3(
+          currentKey,
+          dataSource,
+          dataGenerator,
+          compress,
+          iso,
+          safeTimestamp,
+        ),
+        this.streamToS3(
+          snapshotKey,
+          dataSource,
+          dataGenerator,
+          compress,
+          iso,
+          safeTimestamp,
+        ),
+      ]);
+
+      return {
+        success: true,
+        currentKey,
+        snapshotKey,
+        recordCount: currentResult.recordCount,
+      };
+    } catch (error) {
+      console.error(`Error streaming ${dataSource} data:`, error);
+      return {
+        success: false,
+        errorMessage: `An error occurred when streaming the dataset ${dataSource}`,
+      };
+    }
+  }
+
+  private async streamToS3(
+    key: string,
+    dataSource: DataSource,
+    dataGenerator: AsyncGenerator<T[], void, unknown>,
+    compress: boolean,
+    iso: string,
+    safeTimestamp: string,
+  ): Promise<{ recordCount: number }> {
+    const stream = new PassThrough();
+    let recordCount = 0;
+    let isFirstBatch = true;
+
+    const upload = new Upload({
+      client: this.s3,
+      params: {
+        Bucket: this.bucketName,
+        Key: key,
+        Body: compress ? stream.pipe(zlib.createGzip()) : stream,
+        ContentType: compress ? 'application/gzip' : 'application/json',
+        ContentEncoding: compress ? 'gzip' : undefined,
+      },
+    });
+
+    const uploadPromise = upload.done();
+
+    stream.write('{\n');
+    stream.write('  "metadata": {\n');
+    stream.write(`    "dataSource": "${dataSource}",\n`);
+    stream.write(`    "fileName": "${safeTimestamp}",\n`);
+    stream.write(`    "time": "${iso}",\n`);
+    stream.write('    "recordCount": 0\n');
+    stream.write('  },\n');
+    stream.write('  "data": [\n');
+
+    try {
+      for await (const batch of dataGenerator) {
+        if (!isFirstBatch) {
+          stream.write(',\n');
+        }
+
+        const batchJson = JSON.stringify(batch).slice(1, -1);
+        if (batchJson.length > 0) {
+          stream.write(batchJson);
+          recordCount += batch.length;
+        }
+
+        isFirstBatch = false;
+      }
+
+      stream.write('\n  ]\n}');
+      stream.end();
+
+      await uploadPromise;
+      return { recordCount };
+    } catch (error) {
+      stream.destroy();
+      throw error;
+    }
+  }
+
+  public async *streamDataFromS3(
+    dataSource: DataSource,
+    options: { batchSize?: number; compressed?: boolean } = {},
+  ): AsyncGenerator<T[], void, undefined> {
+    const { batchSize = 1000, compressed = false } = options;
+
     try {
       const key = this.getCurrentKey(dataSource);
-      const fullPayload = await this.getJsonFromS3(key);
-      const metadata = fullPayload.metadata;
-      const data: T[] = fullPayload.data;
-      return { success: true, data, metadata };
+      const stream = await this.getS3Stream(key, compressed);
+      const jsonStream = stream.pipe(JSONStream.parse('data.*'));
+
+      let batch: T[] = [];
+
+      for await (const item of jsonStream) {
+        batch.push(item);
+
+        if (batch.length >= batchSize) {
+          yield batch;
+          batch = [];
+        }
+      }
+
+      if (batch.length > 0) {
+        yield batch;
+      }
     } catch (error) {
-      console.log(error);
-      return {
-        success: false,
-        errorMessage: `An error occured when retrieving the dataset ${dataSource} `,
-      };
+      console.error(`Error streaming ${dataSource} data:`, error);
+      throw error;
     }
   }
 
-  async getDataByDate(dataSource: DataSource, date: Date) {
-    try {
-      const key = this.getDatedSnapshotKey(dataSource, date);
-      const fullPayload = await this.getJsonFromS3(key);
-      const metadata = fullPayload.metadata;
-      const data: T[] = fullPayload.data;
-      return { success: true, data, metadata };
-    } catch (error) {
-      console.log(error);
-      return {
-        success: false,
-        errorMessage: `An error occured when retrieving the dataset ${dataSource} `,
-      };
-    }
-  }
+  public async getMetadata(
+    dataSource: DataSource,
+  ): Promise<SnapshotPayload<T>['metadata'] | null> {
+    const key = this.getCurrentKey(dataSource);
+    const stream = await this.getS3Stream(key);
 
-  private async getJsonFromS3(key: string) {
+    return new Promise((resolve, reject) => {
+      const metadataStream = stream.pipe(JSONStream.parse('metadata'));
+
+      metadataStream.on('data', (metadata) => {
+        resolve(metadata);
+      });
+
+      metadataStream.on('error', reject);
+      metadataStream.on('end', () => resolve(null));
+    });
+  }
+  private async getS3Stream(
+    key: string,
+    compressed: boolean = false,
+  ): Promise<Readable> {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
       Key: key,
@@ -109,17 +256,23 @@ export default class WatchdogBlobStorageClient<T> {
 
     try {
       const response = await this.s3.send(command);
-      if (!response.Body) throw new Error(`Empty response for ${key}`);
+      if (!response.Body) {
+        throw new Error(`Empty response for ${key}`);
+      }
 
-      const sdkStream = sdkStreamMixin(response.Body as Readable);
-      const bodyString = await sdkStream.transformToString();
-      return JSON.parse(bodyString);
+      let stream = response.Body as Readable;
+      if (compressed) {
+        stream = stream.pipe(zlib.createGunzip());
+      }
+
+      return stream;
     } catch (error) {
-      console.error(`Error retrieving ${key}:`, error);
+      console.error(`Error getting S3 stream for ${key}:`, error);
       throw error;
     }
   }
-  getTimestamps(dateTimeStamp?: Date): {
+
+  private getTimestamps(dateTimeStamp?: Date): {
     date: Date;
     iso: string;
     safeTimestamp: string;

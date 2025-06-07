@@ -1,174 +1,173 @@
+import City311ReportSchema, {
+  type City311Report,
+} from '../../../ingestion/city-311/validation/city-311-report-schema';
 /**
  * MyLA311 Service Request Data Model
  * Represents a service request from the Los Angeles 311 system
  */
 export class MyLA311ServiceRequest {
   /** Unique service request identifier */
-  public SRNumber: string;
+  public sr_number: string;
 
-  /** Date when the service request was created */
-  public CreatedDate: Date;
+  public created_date: string;
 
-  /** Date when the service request was last updated */
-  public UpdatedDate: Date | null;
+  public updated_date: string | null;
 
-  /** Description of action taken on the request */
-  public ActionTaken: string | null;
+  public action_taken: string | null;
 
   /** Department or person responsible for handling the request */
-  public Owner: string | null;
+  public owner: string | null;
 
   /** Type/category of the service request */
-  public RequestType: string;
+  public request_type: string;
 
-  /** Current status of the service request */
-  public Status: string;
+  public status: string;
 
   /** Source channel where request was submitted (phone, web, mobile app, etc.) */
-  public RequestSource: string | null;
+  public request_source: string | null;
 
   /** Organization of the user who created the request */
-  public CreatedByUserOrganization: string | null;
+  public created_by_user_organization: string | null;
 
   /** Mobile operating system if submitted via mobile app */
-  public MobileOS: string | null;
+  public mobile_os: string | null;
 
   /** Whether the request was submitted anonymously */
-  public Anonymous: boolean;
+  public anonymous: boolean;
 
   /** Person or department assigned to handle the request */
-  public AssignTo: string | null;
+  public assign_to: string | null;
 
   /** Scheduled date for service */
-  public ServiceDate: Date | null;
+  public service_date: Date | null;
 
   /** Date when the request was closed/completed */
-  public ClosedDate: Date | null;
+  public closed_date: string | null;
 
   /** Whether the address has been verified */
-  public AddressVerified: boolean;
+  public address_verified: boolean;
 
   /** Whether an approximate address was used */
-  public ApproximateAddress: boolean;
+  public approximate_address: boolean;
 
   /** Full formatted address */
-  public Address: string | null;
+  public address: string | null;
 
   /** House/building number */
-  public HouseNumber: string | null;
+  public house_number: string | null;
 
   /** Street direction (N, S, E, W, etc.) */
-  public Direction: string | null;
+  public direction: string | null;
 
-  /** Street name */
-  public StreetName: string | null;
+  public street_name: string | null;
 
   /** Street suffix (St, Ave, Blvd, etc.) */
-  public Suffix: string | null;
+  public suffix: string | null;
 
-  /** ZIP/postal code */
-  public ZipCode: string | null;
+  public zipcode: string | null;
 
-  /** Geographic latitude coordinate */
-  public Latitude: number | null;
+  public latitude: number | null;
 
-  /** Geographic longitude coordinate */
-  public Longitude: number | null;
+  public longitude: number | null;
 
   /** Combined location description or coordinates */
-  public Location: string | null;
+  public location: string | null;
 
   /** Thomas Brothers Map page number */
-  public TBMPage: number | null;
+  public tbm_page: number | null;
 
   /** Thomas Brothers Map column */
-  public TBMColumn: string | null;
+  public tbm_column: string | null;
 
   /** Thomas Brothers Map row */
-  public TBMRow: string | null;
+  public tbm_row: string | null;
 
   /** Area Planning Commission district */
-  public APC: string | null;
+  public area_planning_commission_district: string | null;
 
   /** Council District number */
-  public CD: number | null;
+  public council_district_number: string | null;
 
   /** Council District member name */
-  public CDMember: string | null;
+  public council_district_member_name: string | null;
 
   /** Neighborhood Council identifier */
-  public NC: number | null;
+  public neighborhood_council_identifier: string | null;
 
   /** Neighborhood Council name */
-  public NCName: string | null;
+  public neighborhood_council_name: string | null;
 
   /** Police precinct/division */
-  public PolicePrecinct: string | null;
+  public police_precint: string | null;
 
   constructor(data: Partial<MyLA311ServiceRequest> = {}) {
-    this.SRNumber = data.SRNumber || '';
-    this.CreatedDate = data.CreatedDate || new Date();
-    this.UpdatedDate = data.UpdatedDate || null;
-    this.ActionTaken = data.ActionTaken || null;
-    this.Owner = data.Owner || null;
-    this.RequestType = data.RequestType || '';
-    this.Status = data.Status || '';
-    this.RequestSource = data.RequestSource || null;
-    this.CreatedByUserOrganization = data.CreatedByUserOrganization || null;
-    this.MobileOS = data.MobileOS || null;
-    this.Anonymous = data.Anonymous || false;
-    this.AssignTo = data.AssignTo || null;
-    this.ServiceDate = data.ServiceDate || null;
-    this.ClosedDate = data.ClosedDate || null;
-    this.AddressVerified = data.AddressVerified || false;
-    this.ApproximateAddress = data.ApproximateAddress || false;
-    this.Address = data.Address || null;
-    this.HouseNumber = data.HouseNumber || null;
-    this.Direction = data.Direction || null;
-    this.StreetName = data.StreetName || null;
-    this.Suffix = data.Suffix || null;
-    this.ZipCode = data.ZipCode || null;
-    this.Latitude = data.Latitude || null;
-    this.Longitude = data.Longitude || null;
-    this.Location = data.Location || null;
-    this.TBMPage = data.TBMPage || null;
-    this.TBMColumn = data.TBMColumn || null;
-    this.TBMRow = data.TBMRow || null;
-    this.APC = data.APC || null;
-    this.CD = data.CD || null;
-    this.CDMember = data.CDMember || null;
-    this.NC = data.NC || null;
-    this.NCName = data.NCName || null;
-    this.PolicePrecinct = data.PolicePrecinct || null;
+    this.sr_number = data.sr_number || '';
+    this.created_date = data.created_date || new Date().toISOString();
+    this.updated_date = data.updated_date || null;
+    this.action_taken = data.action_taken || null;
+    this.owner = data.owner || null;
+    this.request_type = data.request_type || '';
+    this.status = data.status || '';
+    this.request_source = data.request_source || null;
+    this.created_by_user_organization =
+      data.created_by_user_organization || null;
+    this.mobile_os = data.mobile_os || null;
+    this.anonymous = data.anonymous || false;
+    this.assign_to = data.assign_to || null;
+    this.service_date = data.service_date || null;
+    this.closed_date = data.closed_date || null;
+    this.address_verified = data.address_verified || false;
+    this.approximate_address = data.approximate_address || false;
+    this.address = data.address || null;
+    this.house_number = data.house_number || null;
+    this.direction = data.direction || null;
+    this.street_name = data.street_name || null;
+    this.suffix = data.suffix || null;
+    this.zipcode = data.zipcode || null;
+    this.latitude = data.latitude || null;
+    this.longitude = data.longitude || null;
+    this.location = data.location || null;
+    this.tbm_page = data.tbm_page || null;
+    this.tbm_column = data.tbm_column || null;
+    this.tbm_row = data.tbm_row || null;
+    this.area_planning_commission_district =
+      data.area_planning_commission_district || null;
+    this.council_district_number = data.council_district_number || null;
+    this.council_district_member_name =
+      data.council_district_member_name || null;
+    this.neighborhood_council_identifier =
+      data.neighborhood_council_identifier || null;
+    this.neighborhood_council_name = data.neighborhood_council_name || null;
+    this.police_precint = data.police_precint || null;
   }
 
   /**
    * Check if the service request is currently open
    */
   public isOpen(): boolean {
-    return this.ClosedDate === null;
+    return this.closed_date === null;
   }
 
   /**
    * Check if the service request is closed
    */
   public isClosed(): boolean {
-    return this.ClosedDate !== null;
+    return this.closed_date !== null;
   }
 
   /**
    * Get the full address as a formatted string
    */
   public getFormattedAddress(): string {
-    if (this.Address) {
-      return this.Address;
+    if (this.address) {
+      return this.address;
     }
 
     const parts: string[] = [];
-    if (this.HouseNumber) parts.push(this.HouseNumber);
-    if (this.Direction) parts.push(this.Direction);
-    if (this.StreetName) parts.push(this.StreetName);
-    if (this.Suffix) parts.push(this.Suffix);
+    if (this.house_number) parts.push(this.house_number);
+    if (this.direction) parts.push(this.direction);
+    if (this.street_name) parts.push(this.street_name);
+    if (this.suffix) parts.push(this.suffix);
 
     return parts.join(' ');
   }
@@ -177,7 +176,7 @@ export class MyLA311ServiceRequest {
    * Check if location coordinates are available
    */
   public hasCoordinates(): boolean {
-    return this.Latitude !== null && this.Longitude !== null;
+    return this.latitude !== null && this.longitude !== null;
   }
 
   /**
@@ -185,95 +184,109 @@ export class MyLA311ServiceRequest {
    */
   public getCoordinates(): [number, number] | null {
     if (this.hasCoordinates()) {
-      return [this.Latitude!, this.Longitude!];
+      return [this.latitude!, this.longitude!];
     }
     return null;
   }
 
-  /**
-   * Convert the model to a plain object for JSON serialization
-   */
-  public toJSON(): Record<string, any> {
-    return {
-      SRNumber: this.SRNumber,
-      CreatedDate: this.CreatedDate.toISOString(),
-      UpdatedDate: this.UpdatedDate?.toISOString() || null,
-      ActionTaken: this.ActionTaken,
-      Owner: this.Owner,
-      RequestType: this.RequestType,
-      Status: this.Status,
-      RequestSource: this.RequestSource,
-      CreatedByUserOrganization: this.CreatedByUserOrganization,
-      MobileOS: this.MobileOS,
-      Anonymous: this.Anonymous,
-      AssignTo: this.AssignTo,
-      ServiceDate: this.ServiceDate?.toISOString() || null,
-      ClosedDate: this.ClosedDate?.toISOString() || null,
-      AddressVerified: this.AddressVerified,
-      ApproximateAddress: this.ApproximateAddress,
-      Address: this.Address,
-      HouseNumber: this.HouseNumber,
-      Direction: this.Direction,
-      StreetName: this.StreetName,
-      Suffix: this.Suffix,
-      ZipCode: this.ZipCode,
-      Latitude: this.Latitude,
-      Longitude: this.Longitude,
-      Location: this.Location,
-      TBMPage: this.TBMPage,
-      TBMColumn: this.TBMColumn,
-      TBMRow: this.TBMRow,
-      APC: this.APC,
-      CD: this.CD,
-      CDMember: this.CDMember,
-      NC: this.NC,
-      NCName: this.NCName,
-      PolicePrecinct: this.PolicePrecinct,
-    };
-  }
+  // /**
+  //  * Convert the model to a plain object for JSON serialization
+  //  */
+  // public toJSON(): Record<string, any> {
+  //   return {
+  //     SRNumber: this.SRNumber,
+  //     CreatedDate: this.CreatedDate.toISOString(),
+  //     UpdatedDate: this.UpdatedDate?.toISOString() || null,
+  //     ActionTaken: this.ActionTaken,
+  //     Owner: this.Owner,
+  //     RequestType: this.RequestType,
+  //     Status: this.Status,
+  //     RequestSource: this.RequestSource,
+  //     CreatedByUserOrganization: this.CreatedByUserOrganization,
+  //     MobileOS: this.MobileOS,
+  //     Anonymous: this.Anonymous,
+  //     AssignTo: this.AssignTo,
+  //     ServiceDate: this.ServiceDate?.toISOString() || null,
+  //     ClosedDate: this.ClosedDate?.toISOString() || null,
+  //     AddressVerified: this.AddressVerified,
+  //     ApproximateAddress: this.ApproximateAddress,
+  //     Address: this.Address,
+  //     HouseNumber: this.HouseNumber,
+  //     Direction: this.Direction,
+  //     StreetName: this.StreetName,
+  //     Suffix: this.Suffix,
+  //     ZipCode: this.ZipCode,
+  //     Latitude: this.Latitude,
+  //     Longitude: this.Longitude,
+  //     Location: this.Location,
+  //     TBMPage: this.TBMPage,
+  //     TBMColumn: this.TBMColumn,
+  //     TBMRow: this.TBMRow,
+  //     APC: this.APC,
+  //     CD: this.CD,
+  //     CDMember: this.CDMember,
+  //     NC: this.NC,
+  //     NCName: this.NCName,
+  //     PolicePrecinct: this.PolicePrecinct,
+  //   };
+  // }
 
   /**
    * Create a new instance from a plain object (e.g., from API response)
    */
-  public static fromJSON(data: any): MyLA311ServiceRequest {
+  public static fromAPIJSON(data: unknown): MyLA311ServiceRequest {
+    const parsedData: City311Report = City311ReportSchema.parse(data);
     const instance = new MyLA311ServiceRequest();
 
-    instance.SRNumber = data.SRNumber || '';
-    instance.CreatedDate = data.CreatedDate
-      ? new Date(data.CreatedDate)
-      : new Date();
-    instance.UpdatedDate = data.UpdatedDate ? new Date(data.UpdatedDate) : null;
-    instance.ActionTaken = data.ActionTaken || null;
-    instance.Owner = data.Owner || null;
-    instance.RequestType = data.RequestType || '';
-    instance.Status = data.Status || '';
-    instance.RequestSource = data.RequestSource || null;
-    instance.CreatedByUserOrganization = data.CreatedByUserOrganization || null;
-    instance.MobileOS = data.MobileOS || null;
-    instance.Anonymous = Boolean(data.Anonymous);
-    instance.AssignTo = data.AssignTo || null;
-    instance.ServiceDate = data.ServiceDate ? new Date(data.ServiceDate) : null;
-    instance.ClosedDate = data.ClosedDate ? new Date(data.ClosedDate) : null;
-    instance.AddressVerified = Boolean(data.AddressVerified);
-    instance.ApproximateAddress = Boolean(data.ApproximateAddress);
-    instance.Address = data.Address || null;
-    instance.HouseNumber = data.HouseNumber || null;
-    instance.Direction = data.Direction || null;
-    instance.StreetName = data.StreetName || null;
-    instance.Suffix = data.Suffix || null;
-    instance.ZipCode = data.ZipCode || null;
-    instance.Latitude = data.Latitude ? Number(data.Latitude) : null;
-    instance.Longitude = data.Longitude ? Number(data.Longitude) : null;
-    instance.Location = data.Location || null;
-    instance.TBMPage = data.TBMPage ? Number(data.TBMPage) : null;
-    instance.TBMColumn = data.TBMColumn || null;
-    instance.TBMRow = data.TBMRow || null;
-    instance.APC = data.APC || null;
-    instance.CD = data.CD ? Number(data.CD) : null;
-    instance.CDMember = data.CDMember || null;
-    instance.NC = data.NC ? Number(data.NC) : null;
-    instance.NCName = data.NCName || null;
-    instance.PolicePrecinct = data.PolicePrecinct || null;
+    instance.sr_number = parsedData.srnumber || '';
+    instance.created_date = parsedData.createddate
+      ? new Date(parsedData.createddate).toISOString()
+      : new Date().toISOString();
+    instance.updated_date = parsedData.updateddate
+      ? new Date(parsedData.updateddate).toISOString()
+      : null;
+    instance.action_taken = parsedData.actiontaken || null;
+    instance.owner = parsedData.owner || null;
+    instance.request_type = parsedData.requesttype || '';
+    instance.status = parsedData.status || '';
+    instance.request_source = parsedData.requestsource || null;
+    instance.created_by_user_organization =
+      parsedData.createdbyuserorganization || null;
+    instance.mobile_os = parsedData.mobileos || null;
+    instance.anonymous = Boolean(parsedData.anonymous);
+    instance.assign_to = parsedData.assignto || null;
+    instance.service_date = parsedData.servicedate
+      ? new Date(parsedData.servicedate)
+      : null;
+    instance.closed_date = parsedData.closeddate
+      ? new Date(parsedData.closeddate).toISOString()
+      : null;
+    instance.address_verified = Boolean(parsedData.addressverified);
+    instance.approximate_address = Boolean(parsedData.approximateaddress);
+    instance.address = parsedData.address || null;
+    instance.house_number = parsedData.housenumber || null;
+    instance.direction = parsedData.direction || null;
+    instance.street_name = parsedData.streetname || null;
+    instance.suffix = parsedData.suffix || null;
+    instance.zipcode = parsedData.zipcode || null;
+    instance.latitude = parsedData.latitude
+      ? Number(parsedData.latitude)
+      : null;
+    instance.longitude = parsedData.longitude
+      ? Number(parsedData.longitude)
+      : null;
+    instance.location = null;
+    instance.tbm_page = parsedData.tbmpage ? Number(parsedData.tbmpage) : null;
+    instance.tbm_column = parsedData.tbmcolumn || null;
+    instance.tbm_row = parsedData.tbmrow || null;
+    instance.area_planning_commission_district = parsedData.apc || null;
+    instance.council_district_number = parsedData.cd ? parsedData.cd : null;
+    instance.council_district_number = `${parsedData.cdmember}` || null;
+    instance.neighborhood_council_identifier = parsedData.nc
+      ? parsedData.nc
+      : null;
+    instance.neighborhood_council_name = parsedData.ncname || null;
+    instance.police_precint = parsedData.policeprecinct || null;
 
     return instance;
   }

@@ -31,7 +31,7 @@ export abstract class SocrataClientBase {
     if (Array.isArray(response)) {
       return { data: response };
     }
-    console.log(response);
+    //console.log(response);
 
     return {
       data: response.data || [],

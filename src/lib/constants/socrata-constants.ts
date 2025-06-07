@@ -1,5 +1,6 @@
 export const enum DataSource {
   Requests311 = 'city-311',
+  Config = 'config',
 }
 
 export const SOCRATA_SOURCES = {

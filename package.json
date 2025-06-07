@@ -44,10 +44,16 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.817.0",
     "@aws-sdk/client-s3": "^3.798.0",
+    "@aws-sdk/lib-dynamodb": "^3.821.0",
+    "@aws-sdk/lib-storage": "^3.824.0",
     "@aws-sdk/util-dynamodb": "^3.821.0",
     "@aws-sdk/util-stream-node": "^3.370.0",
+    "@aws/dynamodb-batch-iterator": "^0.7.1",
+    "@block65/dynamodb-batch-iterator": "^0.7.4-alpha.2",
     "@ts-rest/core": "^3.52.1",
+    "class-transformer": "^0.5.1",
     "dotenv": "^16.5.0",
+    "JSONStream": "^1.3.5",
     "pg": "^8.15.6",
     "zod": "^3.24.3"
   }

@@ -7,10 +7,15 @@ import {
 import {
   DynamoDBDocumentClient,
   BatchWriteCommand,
+  type BatchGetCommandInput,
+  BatchGetCommand,
   type BatchWriteCommandInput,
+  type BatchGetCommandOutput,
 } from '@aws-sdk/lib-dynamodb';
+import { chunkArray } from './table-utils';
+import { MyLA311ServiceRequest } from 'src/lib/types/models/city-311-report';
 
-export default class WatchdogTableStorageClient<TDataType> {
+export default class TableStorageClient<TDataType> {
   private dynamodb: DynamoDBDocumentClient;
   constructor(
     private tableName: string,
@@ -40,6 +45,27 @@ export default class WatchdogTableStorageClient<TDataType> {
     for (const chunkPutRequests of chunkedPutRequests) {
       await this.batchWriteWithRetry(chunkPutRequests);
     }
+  }
+
+  public async getCity311Data(
+    dataKeys: string[],
+  ): Promise<Array<MyLA311ServiceRequest>> {
+    const items = await this.getData(dataKeys, 'SRNumber');
+    return items.map((i) => MyLA311ServiceRequest.fromAPIJSON(i));
+  }
+
+  private async getData(dataKeys: string[], hashKeyName: string) {
+    const input: BatchGetCommandInput = {
+      RequestItems: {
+        [this.tableName]: {
+          Keys: dataKeys.map((i) => ({ [hashKeyName]: i })),
+        },
+      },
+    };
+    const command = new BatchGetCommand(input);
+    const response: BatchGetCommandOutput = await this.dynamodb.send(command);
+    const items = response.Responses?.[this.tableName] || [];
+    return items;
   }
 
   private async batchWriteWithRetry(
@@ -72,12 +98,4 @@ export default class WatchdogTableStorageClient<TDataType> {
       currentRequests = unprocessed[this.tableName]!;
     }
   }
-}
-
-function chunkArray<T>(arr: T[], size: number): T[][] {
-  const chunks: T[][] = [];
-  for (let i = 0; i < arr.length; i += size) {
-    chunks.push(arr.slice(i, i + size));
-  }
-  return chunks;
 }

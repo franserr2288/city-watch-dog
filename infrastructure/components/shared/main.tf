@@ -45,38 +45,47 @@ module "dynamodb_config_table" {
 module "city_311_data" {
   source = "../../modules/dynamodb"
   table_name = "city_311_data"
-  hash_key   = "SRNumber"     
+  hash_key   = "sr_number" 
+  range_key = "created_date"    
   attributes = [
-    { name = "SRNumber" , type = "S"},
-    { name = "RequestType", type = "S"},
-    { name = "UpdatedDate",type = "S" },
-    { name = "Status" , type = "S"}, 
-    { name = "CreatedDate" , type = "S"}, 
-    {name = "RequestSource", type = "S"}
+    { name = "sr_number" , type = "S"},
+    { name = "request_type", type = "S"},
+    { name = "updated_date",type = "S" },
+    { name = "status" , type = "S"}, 
+    { name = "created_date" , type = "S"}, 
+    {name = "request_source", type = "S"}
   ]
 
   global_secondary_indexes = [
     {
-      name            = "UpdatedDateIndex",
-      hash_key        = "RequestType",
-      range_key       = "UpdatedDate",
-      projection_type = "ALL",
-      non_key_attributes = []
+      name = "request_type_index"
+      hash_key = "request_type",
+      range_key = "created_date",
+      projection_type = "ALL"        
+      non_key_attributes = [] 
+    }, 
+    {
+      name = "updated_date_index"
+      hash_key = "updated_date",
+      range_key = "",
+      projection_type = "ALL"        
+      non_key_attributes = [] 
     },
     {
-      name            = "StatusIndex",
-      hash_key        = "Status",
-      range_key       = "UpdatedDate",
-      projection_type = "ALL",
-      non_key_attributes = []
+      name = "status_index"
+      hash_key = "status",
+      range_key = "created_date",
+      projection_type = "ALL"        
+      non_key_attributes = [] 
     },
     {
-      name            = "CreatedDateIndex",
-      hash_key        = "RequestSource",
-      range_key       = "CreatedDate",
-      projection_type = "ALL",
-      non_key_attributes = []
+      name = "request_source_index"
+      hash_key = "request_source",
+      range_key = "",
+      projection_type = "ALL"        
+      non_key_attributes = [] 
     }
+
   ]
 
   tags = {
