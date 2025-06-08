@@ -23,6 +23,7 @@ import type {
   City311PaginationCursor,
   ConfigTableExpectedShape,
 } from 'src/lib/types/behaviors/pagination';
+import { createDynamoClient } from './local-dev';
 
 export default class TableStorageClient<TDataType> {
   private dynamodb: DynamoDBDocumentClient;
@@ -31,7 +32,7 @@ export default class TableStorageClient<TDataType> {
     private region: string = getEnvVar('INFRA_REGION'),
     ddbClient?: DynamoDB,
   ) {
-    const client = ddbClient ?? new DynamoDB({ region: this.region });
+    const client = ddbClient ?? createDynamoClient(region);
     const docClient = DynamoDBDocumentClient.from(client, {
       marshallOptions: {
         convertClassInstanceToMap: true,

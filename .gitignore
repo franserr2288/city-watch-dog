@@ -81,3 +81,5 @@ override.tf.json
 
 .eslintcache
 .prettiercache
+
+local-dev/localstack-data

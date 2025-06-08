@@ -9,6 +9,7 @@ import { Upload } from '@aws-sdk/lib-storage';
 import { PassThrough, Readable } from 'stream';
 import * as zlib from 'zlib';
 import JSONStream from 'JSONStream';
+import { createS3Client } from './local-dev';
 const BUCKET_REGION = getEnvVar('INFRA_REGION');
 const BUCKET_NAME = getEnvVar('DAILY_SNAPSHOT_BUCKET');
 
@@ -39,7 +40,7 @@ export default class BlobStorageClient<T> {
     region: string = BUCKET_REGION,
     s3Client?: S3Client,
   ) {
-    this.s3 = s3Client ?? new S3Client({ region });
+    this.s3 = s3Client ?? createS3Client(region);
     this.bucketName = bucketName;
   }
 
