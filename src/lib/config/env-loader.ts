@@ -1,10 +1,15 @@
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { findUpSync } from 'find-up';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.join(__dirname, '.env') });
+const envPath = findUpSync('.env');
+
+if (envPath) {
+  dotenv.config({ path: envPath });
+} else {
+  console.warn(
+    'No .env file found in current directory or any parent directories',
+  );
+}
 
 export const getEnvVar = (key: string): string => {
   const value = process.env[key];

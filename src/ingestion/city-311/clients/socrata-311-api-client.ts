@@ -13,7 +13,7 @@ import {
   ConfigTableUseCases,
   constructConfigKey,
 } from 'src/lib/clients/cloud/table-utils';
-import { DataSource } from 'src/lib/constants/socrata-constants';
+import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 
 export class City311ApiClient
   extends SocrataClientBase

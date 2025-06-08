@@ -42,5 +42,5 @@ export function getEntryPointName(entrypoint: string): string {
 }
 
 export function getLambdaEntrypoints(): string[] {
-  return globSync('src/**/entrypoints/*/handler.ts');
+  return globSync('src/**/handlers/**.ts');
 }

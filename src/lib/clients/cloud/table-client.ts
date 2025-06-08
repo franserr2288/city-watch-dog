@@ -18,7 +18,7 @@ import {
   constructConfigKey,
 } from './table-utils';
 import { MyLA311ServiceRequest } from 'src/lib/types/models/city-311-report';
-import { DataSource } from 'src/lib/constants/socrata-constants';
+import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 import type {
   City311PaginationCursor,
   ConfigTableExpectedShape,

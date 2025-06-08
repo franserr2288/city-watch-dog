@@ -1,4 +1,4 @@
-import { DataSource } from 'src/lib/constants/socrata-constants';
+import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 import type BlobStorageClient from 'src/lib/clients/cloud/blob-client';
 import type TableStorageClient from 'src/lib/clients/cloud/table-client';
 

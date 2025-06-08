@@ -1,4 +1,4 @@
-import type { DataSource } from 'src/lib/constants/socrata-constants';
+import type { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 
 export function constructConfigKey(
   useCase: ConfigTableUseCases,

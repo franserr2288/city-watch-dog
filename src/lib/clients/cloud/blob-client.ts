@@ -1,5 +1,5 @@
 import { getEnvVar } from 'src/lib/config/env-loader';
-import type { DataSource } from 'src/lib/constants/socrata-constants';
+import type { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 import {
   S3Client,
   PutObjectCommand,

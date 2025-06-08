@@ -1,6 +1,6 @@
 import { initContract } from '@ts-rest/core';
 import City311ReportSchema from 'src/ingestion/city-311/clients/city-311-report-schema';
-import { SOCRATA_SOURCES } from 'src/lib/constants/socrata-constants';
+import { SOCRATA_SOURCES } from 'src/lib/clients/socrata/socrata-constants';
 import { z } from 'zod';
 
 export function createCityApiContract(
