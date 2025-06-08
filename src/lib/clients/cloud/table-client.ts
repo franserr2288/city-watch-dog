@@ -12,8 +12,17 @@ import {
   type BatchWriteCommandInput,
   type BatchGetCommandOutput,
 } from '@aws-sdk/lib-dynamodb';
-import { chunkArray } from './table-utils';
+import {
+  chunkArray,
+  ConfigTableUseCases,
+  constructConfigKey,
+} from './table-utils';
 import { MyLA311ServiceRequest } from 'src/lib/types/models/city-311-report';
+import { DataSource } from 'src/lib/constants/socrata-constants';
+import type {
+  City311PaginationCursor,
+  ConfigTableExpectedShape,
+} from 'src/lib/types/behaviors/pagination';
 
 export default class TableStorageClient<TDataType> {
   private dynamodb: DynamoDBDocumentClient;
@@ -46,11 +55,37 @@ export default class TableStorageClient<TDataType> {
       await this.batchWriteWithRetry(chunkPutRequests);
     }
   }
+  public async getBackfillRecord(): Promise<
+    ConfigTableExpectedShape<City311PaginationCursor> | undefined
+  > {
+    const dataKey: string = constructConfigKey(
+      ConfigTableUseCases.IntakeBackfillCompleted,
+      DataSource.Requests311,
+    );
+    const response = await this.getData([dataKey], 'config_key');
+    return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
+  }
+  public async getBatchedProcessRecord() {
+    const dataKey: string = constructConfigKey(
+      ConfigTableUseCases.IntakeBatchingProgressCheckpoints,
+      DataSource.Requests311,
+    );
+    const response = await this.getData([dataKey], 'config_key');
+    return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
+  }
+  public async getLastUpdateRecord() {
+    const dataKey: string = constructConfigKey(
+      ConfigTableUseCases.ChangeDetectionLayer,
+      DataSource.Requests311,
+    );
+    const response = await this.getData([dataKey], 'config_key');
+    return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
+  }
 
   public async getCity311Data(
     dataKeys: string[],
   ): Promise<Array<MyLA311ServiceRequest>> {
-    const items = await this.getData(dataKeys, 'SRNumber');
+    const items = await this.getData(dataKeys, 'sr_number');
     return items.map((i) => MyLA311ServiceRequest.fromAPIJSON(i));
   }
 

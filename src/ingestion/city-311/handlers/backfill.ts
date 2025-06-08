@@ -10,15 +10,12 @@ export default async function handler(event, context): Promise<void> {
     console.log(`EXCECUTION CONTEXT ${context}`);
 
     const city311Client = new City311ApiClient();
-    const blobStorageClient: TableStorageClient<MyLA311ServiceRequest> =
-      new TableStorageClient(getEnvVar('S3_BUCKET_NAME'));
+    const inTakeTableStorageCLient: TableStorageClient<MyLA311ServiceRequest> =
+      new TableStorageClient(getEnvVar('DAILY_SNAPSHOT_BUCKET'));
     const extractor: City311Extractor = new City311Extractor(city311Client);
 
     for await (const chunk of extractor.backfill()) {
-      const modelInstances = chunk.data.map((i) =>
-        MyLA311ServiceRequest.fromAPIJSON(i),
-      );
-      blobStorageClient.storeData(modelInstances);
+      inTakeTableStorageCLient.storeData(chunk);
     }
   } catch (error) {
     console.error('Error occurred in scheduled Lambda:', error);

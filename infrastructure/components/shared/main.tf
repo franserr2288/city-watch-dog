@@ -46,7 +46,6 @@ module "city_311_data" {
   source = "../../modules/dynamodb"
   table_name = "city_311_data"
   hash_key   = "sr_number" 
-  range_key = "created_date"    
   attributes = [
     { name = "sr_number" , type = "S"},
     { name = "request_type", type = "S"},

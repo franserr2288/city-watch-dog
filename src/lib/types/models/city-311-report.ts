@@ -1,6 +1,6 @@
 import City311ReportSchema, {
   type City311Report,
-} from '../../../ingestion/city-311/validation/city-311-report-schema';
+} from '../../../ingestion/city-311/clients/city-311-report-schema';
 /**
  * MyLA311 Service Request Data Model
  * Represents a service request from the Los Angeles 311 system

@@ -3,7 +3,7 @@ import { City311ApiClient } from '../clients/socrata-311-api-client';
 import { DataSource } from 'src/lib/constants/socrata-constants';
 import BlobStorageClient from 'src/lib/clients/cloud/blob-client';
 import { MyLA311ServiceRequest } from 'src/lib/types/models/city-311-report';
-import { mapToStorageLayerModels } from 'src/ingestion/shared/maps';
+import City311Extractor from '../extractor';
 
 export default async function handler(event, context): Promise<void> {
   try {
@@ -14,9 +14,10 @@ export default async function handler(event, context): Promise<void> {
     const storageClient = new BlobStorageClient<MyLA311ServiceRequest>(
       getEnvVar('DAILY_SNAPSHOT_BUCKET'),
     );
+    const extractor: City311Extractor = new City311Extractor(client);
 
     storageClient.streamData(DataSource.Requests311, {
-      dataGenerator: mapToStorageLayerModels(client.getSnapshotBatches()),
+      dataGenerator: extractor.snapshot(),
       compress: true,
     });
   } catch (error) {

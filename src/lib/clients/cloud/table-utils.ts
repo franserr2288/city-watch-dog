@@ -7,8 +7,9 @@ export function constructConfigKey(
   return `${useCase.toString()}#${dataSource.toString()}`;
 }
 export enum ConfigTableUseCases {
-  Batching = 'batch',
-  Backfilled = 'backfilled',
+  IntakeBatchingProgressCheckpoints = 'batch',
+  IntakeBackfillCompleted = 'backfilled',
+  ChangeDetectionLayer = 'updated',
 }
 
 export function chunkArray<T>(arr: T[], size: number): T[][] {

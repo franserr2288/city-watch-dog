@@ -1,4 +1,4 @@
-import type { City311Report } from 'src/ingestion/city-311/validation/city-311-report-schema';
+import type { City311Report } from 'src/ingestion/city-311/clients/city-311-report-schema';
 import type { BatchResult } from './pagination';
 
 export interface City311DataRequestNeeds {
@@ -12,12 +12,7 @@ export interface City311DataRequestNeeds {
     void,
     unknown
   >;
-  detectNewRecordBatchesSinceLastChange(): AsyncGenerator<
-    BatchResult<City311Report>,
-    void,
-    unknown
-  >;
-  detectUpdatedRecordBatchesSinceLastChange(): AsyncGenerator<
+  detectNewRecordsAndUpdatedRecordsSinceLastCheck(): AsyncGenerator<
     BatchResult<City311Report>,
     void,
     unknown
