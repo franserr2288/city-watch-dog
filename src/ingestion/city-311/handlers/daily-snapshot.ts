@@ -10,14 +10,16 @@ export default async function handler(event, context): Promise<void> {
     console.log(`EVENT DATA ${event}`);
     console.log(`EXCECUTION CONTEXT ${context}`);
 
-    const client = new City311ApiClient();
-    const storageClient = new BlobStorageClient<MyLA311ServiceRequest>(
+    const dataSourceApiClient = new City311ApiClient();
+    const blobStorageClient = new BlobStorageClient<MyLA311ServiceRequest>(
       getEnvVar('DAILY_SNAPSHOT_BUCKET'),
     );
-    const extractor: City311Extractor = new City311Extractor(client);
+    const dataExtractor: City311Extractor = new City311Extractor(
+      dataSourceApiClient,
+    );
 
-    storageClient.streamData(DataSource.Requests311, {
-      dataGenerator: extractor.snapshot(),
+    await blobStorageClient.streamData(DataSource.Requests311, {
+      dataGenerator: dataExtractor.snapshot(),
       compress: true,
     });
   } catch (error) {

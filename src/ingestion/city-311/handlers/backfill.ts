@@ -9,13 +9,15 @@ export default async function handler(event, context): Promise<void> {
     console.log(`EVENT DATA ${event}`);
     console.log(`EXCECUTION CONTEXT ${context}`);
 
-    const city311Client = new City311ApiClient();
+    const dataSourceApiClient = new City311ApiClient();
     const inTakeTableStorageCLient: TableStorageClient<MyLA311ServiceRequest> =
       new TableStorageClient(getEnvVar('DAILY_SNAPSHOT_BUCKET'));
-    const extractor: City311Extractor = new City311Extractor(city311Client);
+    const dataExtractor: City311Extractor = new City311Extractor(
+      dataSourceApiClient,
+    );
 
-    for await (const chunk of extractor.backfill()) {
-      inTakeTableStorageCLient.storeData(chunk);
+    for await (const chunk of dataExtractor.backfill()) {
+      await inTakeTableStorageCLient.storeData(chunk);
     }
   } catch (error) {
     console.error('Error occurred in scheduled Lambda:', error);
