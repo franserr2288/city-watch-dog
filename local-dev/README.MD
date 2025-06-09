@@ -24,7 +24,8 @@ The startup script:
 2. **Runs Terraform** - Creates all the tables, buckets, etc.
 3. **Confirms it worked** - Health checks pass
 
-Everything your app needs is ready to go.
+Script does it best to catch the errors but check:
+docker-compose -f local-dev/docker-compose.yml logs
 
 ## Files
 
