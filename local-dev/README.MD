@@ -24,7 +24,7 @@ The startup script:
 2. **Runs Terraform** - Creates all the tables, buckets, etc.
 3. **Confirms it worked** - Health checks pass
 
-Script does it best to catch the errors but check:
+Script tries to catch errors, but if things break check:
 docker-compose -f local-dev/docker-compose.yml logs
 
 ## Files
@@ -38,9 +38,10 @@ docker-compose -f local-dev/docker-compose.yml logs
 Make sure you have a `.env` file in the project root with these keys:
 
 ```bash
-DATA_BUCKET_NAME=
-CITY_311_TABLE_NAME=
-AWS_DEFAULT_REGION=
+DAILY_SNAPSHOT_BUCKET=
+INFRA_REGION=
+INTAKE_TABLE=
+CONFIG_TABLE=
 LOCAL_DEV=
 ```
 
@@ -79,10 +80,4 @@ terraform apply
 - Make sure port 4566 isn't blocked
 - Resource names might not match between Terraform and app
 
-## Development Workflow
-
-1. **Start environment**: `./start-localstack.sh`
-2. **Run tests**: Test your pipeline handlers
-3. **Make changes**: Modify Terraform or application code
-4. **Re-deploy**: Run `terraform apply` in `infrastructure/environments/local/`
-5. **Clean up**: `docker-compose down` when done
+*
