@@ -7,12 +7,12 @@ import type {
   City311PaginationCursor,
   ConfigTableExpectedShape,
 } from 'src/lib/types/behaviors/pagination';
-import TableStorageClient from 'src/lib/clients/cloud/table-client';
-import { getEnvVar } from 'src/lib/config/env-loader';
+import TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
+import { getEnvVar } from 'src/lib/config/internal/env-loader';
 import {
   ConfigTableUseCases,
   constructConfigKey,
-} from 'src/lib/clients/cloud/table-utils';
+} from 'src/lib/clients/infrastructure/table/table-utils';
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 
 export class City311ApiClient

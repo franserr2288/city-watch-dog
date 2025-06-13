@@ -1,4 +1,3 @@
-import { getEnvVar } from 'src/lib/config/env-loader';
 import type { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 import {
   S3Client,
@@ -9,7 +8,8 @@ import { Upload } from '@aws-sdk/lib-storage';
 import { PassThrough, Readable } from 'stream';
 import * as zlib from 'zlib';
 import JSONStream from 'JSONStream';
-import { createS3Client } from './local-dev';
+import { getEnvVar } from 'src/lib/config/env';
+import { createS3Client } from './client-factory';
 const BUCKET_REGION = getEnvVar('INFRA_REGION');
 const BUCKET_NAME = getEnvVar('DAILY_SNAPSHOT_BUCKET');
 

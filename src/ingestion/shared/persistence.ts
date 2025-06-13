@@ -1,6 +1,6 @@
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
-import type BlobStorageClient from 'src/lib/clients/cloud/blob-client';
-import type TableStorageClient from 'src/lib/clients/cloud/table-client';
+import type BlobStorageClient from 'src/lib/clients/infrastructure/blob/blob-client';
+import type TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
 
 interface IIntakeStorageStrategy<T> {
   storeSnapshot(data: T[]): Promise<void>;

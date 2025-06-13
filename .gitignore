@@ -20,6 +20,7 @@ ENV/
 # Environment & config files
 *.env
 .env.*
+!.env.example
 secrets/
 config.json
 credentials.json
@@ -82,4 +83,4 @@ override.tf.json
 .eslintcache
 .prettiercache
 
-local-dev/localstack-data
+**/localstack/data

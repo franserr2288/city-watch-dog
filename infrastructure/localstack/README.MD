@@ -9,8 +9,8 @@ Uses **LocalStack + Terraform** instead of manual AWS CLI commands to avoid drif
 ## Recall
 
 ```bash
-# Start everything
-./start-localstack.sh
+# Start everything from project root
+./local-dev/start-localstack.sh
 
 # Test pipeline
 node -r tsx/esm src/ingestion/city-311/handlers/daily-snapshot.ts

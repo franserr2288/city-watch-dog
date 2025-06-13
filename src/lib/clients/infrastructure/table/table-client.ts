@@ -1,4 +1,3 @@
-import { getEnvVar } from 'src/lib/config/env-loader';
 import {
   DynamoDB,
   type BatchWriteItemCommandOutput,
@@ -23,7 +22,8 @@ import type {
   City311PaginationCursor,
   ConfigTableExpectedShape,
 } from 'src/lib/types/behaviors/pagination';
-import { createDynamoClient } from './local-dev';
+import { getEnvVar } from 'src/lib/config/env';
+import { createDynamoClient } from './client-factory';
 
 export default class TableStorageClient<TDataType> {
   private dynamodb: DynamoDBDocumentClient;
