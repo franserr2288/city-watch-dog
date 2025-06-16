@@ -1,27 +1,38 @@
 import { config } from 'dotenv';
 import { findUpSync } from 'find-up';
 import { EnvironmentDetector } from './environment-detector';
+import fs from 'fs';
+import path from 'path';
 
 let envInitialized = false;
 
 export const ensureEnvLoaded = () => {
   if (envInitialized) return;
 
-  const envs = {
+  const envFiles = {
     local: '.env.local',
     dev: '.env.dev',
   };
-  const file = EnvironmentDetector.willTargetLocalstackEndpoints()
-    ? envs.local
-    : envs.dev;
-  const envPath = findUpSync(file);
+  const target = EnvironmentDetector.willTargetLocalstackEndpoints()
+    ? 'local'
+    : 'dev';
+  const fileName = envFiles[target];
+  const envsDir = findUpSync('.envs', { type: 'directory' });
 
-  if (envPath) {
-    config(); // base
-    config({ path: envPath }); // env specific
+  if (envsDir) {
+    const envPath = path.join(envsDir, fileName);
+
+    if (fs.existsSync(envPath)) {
+      config();
+      config({ path: envPath });
+    } else {
+      console.warn(
+        `Found “.envs” at ${envsDir} but no file named ${fileName} inside it.`,
+      );
+    }
   } else {
     console.warn(
-      'No .env file found in current directory or any parent directories',
+      'No “.envs” folder found in current directory or any parent directories.',
     );
   }
 

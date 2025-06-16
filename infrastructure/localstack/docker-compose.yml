@@ -1,0 +1,56 @@
+networks:
+  localstack-network:
+
+# volumes:
+#   localstack-data:
+
+services:
+  localstack:
+    container_name: localstack-main
+    image: localstack/localstack:latest
+    ports:
+      - '4566:4566'
+    environment:
+      - SERVICES=s3,dynamodb,kms,iam
+      - DEBUG=1
+      - PERSISTENCE=0
+      # - DATA_DIR=/tmp/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - SKIP_INFRA_DOWNLOADS=1
+    volumes:
+      # - './data:/var/lib/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    networks:
+      - localstack-network
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4566/_localstack/health']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  runner:
+    build:
+      context: .
+      dockerfile: terraform-runner.Dockerfile
+
+    container_name: runner
+    working_dir: /infrastructure
+    environment:
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - LOCALSTACK_HOST=localstack
+      - HOSTNAME_EXTERNAL=localstack
+      - LOCALSTACK_HOSTNAME=localstack
+      - S3_HOSTNAME=localstack
+      - TF_VAR_s3_use_path_style=true
+      - AWS_DEFAULT_REGION=us-west-1
+    volumes:
+      - '../../envs:/envs'
+      - '../:/infrastructure'
+      - './scripts/deploy.sh:/deploy.sh'
+    entrypoint: ['/deploy.sh']
+    depends_on:
+      localstack:
+        condition: service_healthy
+    networks:
+      - localstack-network

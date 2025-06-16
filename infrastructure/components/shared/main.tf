@@ -1,9 +1,9 @@
 module "source_intake_s3_storage" { 
-    source = "../../modules/s3"
-    project     = var.project
-    environment = var.environment
-    name = "source-intake"
-    enable_versioning = true
+  source = "../../modules/s3"
+  project     = var.project
+  environment = var.environment
+  name = "source-intake"
+  enable_versioning = true
 }
 
 module "dynamodb_s3_metadata_lookup_table" {
