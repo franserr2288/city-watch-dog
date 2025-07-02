@@ -44,6 +44,7 @@ module "dynamodb_config_table" {
 
 module "city_311_data" {
   source = "../../modules/dynamodb"
+  # TODO: CHANGE TO - BETWEEN THEM SO IT IS STANDARD !!!
   table_name = "city_311_data"
   hash_key   = "sr_number" 
   attributes = [

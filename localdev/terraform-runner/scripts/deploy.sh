@@ -1,5 +1,7 @@
 #!/bin/sh
+# working dir is /infrastructure
 set -euo pipefail
+
 # Check LocalStack is running
 if ! curl -s -f http://localstack:4566/_localstack/health > /dev/null 2>&1; then
     echo "❌ LocalStack is not running. Start it first with: ./start.sh"
@@ -7,9 +9,9 @@ if ! curl -s -f http://localstack:4566/_localstack/health > /dev/null 2>&1; then
 fi
 
 echo "🏗️  Deploying infrastructure to LocalStack..."
-
 cd environments/local
 
+# tflocal/terraform cmds
 echo "  Initializing Terraform..."
 tflocal init -backend=false -input=false
 
@@ -23,15 +25,13 @@ echo "📝 Generating environment file..."
 tflocal output -json > "terraform_outputs.json"
 
 
-# Generate env file
+# geenrate the file
 cat > ".env.localstack" << EOF
 # Generated from LocalStack Terraform outputs
 # Created: $(date)
 EOF
 
-# # Convert outputs to env vars
-# jq -r 'to_entries[] | "\(.key | ascii_upcase)=\(.value.value)"' terraform_outputs.json >> .env.localstack
-# Convert outputs to env vars using Python instead of jq
+# use simple py to push it
 python3 -c "
 import json
 import sys
@@ -49,11 +49,15 @@ except Exception as e:
     sys.exit(1)
 " >> .env.localstack
 
+# push to /envs top level dir
 cp .env.localstack ../../../envs/.env.localstack
+
+# clean up
 rm terraform_outputs.json
+rm .env.localstack
 
 echo "📋 Environment file generated: .env.localstack"
 echo ""
 echo "🎉 Setup complete! Generated variables:"
 echo "----------------------------------------"
-cat .env.localstack
+exit 0

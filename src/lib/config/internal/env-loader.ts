@@ -10,7 +10,7 @@ export const ensureEnvLoaded = () => {
   if (envInitialized) return;
 
   const envFiles = {
-    local: '.env.local',
+    local: '.env.localstack',
     dev: '.env.dev',
   };
   const target = EnvironmentDetector.willTargetLocalstackEndpoints()

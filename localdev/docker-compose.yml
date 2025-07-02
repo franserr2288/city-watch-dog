@@ -29,12 +29,10 @@ services:
       retries: 5
       start_period: 15s
 
-  runner:
+  terraform-local-runner:
     build:
-      context: .
-      dockerfile: terraform-runner.Dockerfile
-
-    container_name: runner
+      context: ./terraform-runner
+    container_name: terraform-local-runner
     working_dir: /infrastructure
     environment:
       - AWS_ENDPOINT_URL=http://localstack:4566
@@ -45,12 +43,34 @@ services:
       - TF_VAR_s3_use_path_style=true
       - AWS_DEFAULT_REGION=us-west-1
     volumes:
-      - '../../envs:/envs'
-      - '../:/infrastructure'
-      - './scripts/deploy.sh:/deploy.sh'
+      - '../envs:/envs'
+      - '../infra:/infrastructure'
+      - './terraform-runner/scripts/deploy.sh:/deploy.sh'
     entrypoint: ['/deploy.sh']
     depends_on:
       localstack:
         condition: service_healthy
+    networks:
+      - localstack-network
+    restart: 'no'
+
+  integration-tests:
+    depends_on:
+      terraform-local-runner:
+        condition: service_completed_successfully
+
+    build:
+      context: ./test-runner
+    volumes:
+      - './test-runner/tests:/tests'
+    profiles: [test]
+    working_dir: /tests
+    command: pytest integration/
+
+    environment:
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_DEFAULT_REGION=us-west-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
     networks:
       - localstack-network
