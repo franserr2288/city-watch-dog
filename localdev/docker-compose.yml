@@ -54,7 +54,7 @@ services:
       - localstack-network
     restart: 'no'
 
-  integration-tests:
+  infra-provisioning-tests:
     depends_on:
       terraform-local-runner:
         condition: service_completed_successfully
