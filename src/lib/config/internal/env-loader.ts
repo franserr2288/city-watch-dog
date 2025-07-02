@@ -16,6 +16,7 @@ export const ensureEnvLoaded = () => {
   const target = EnvironmentDetector.willTargetLocalstackEndpoints()
     ? 'local'
     : 'dev';
+
   const fileName = envFiles[target];
   const envsDir = findUpSync('.envs', { type: 'directory' });
 
