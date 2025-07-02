@@ -65,7 +65,7 @@ services:
       - './test-runner/tests:/tests'
     profiles: [test]
     working_dir: /tests
-    command: pytest integration/
+    command: pytest infra/
 
     environment:
       - AWS_ENDPOINT_URL=http://localstack:4566
