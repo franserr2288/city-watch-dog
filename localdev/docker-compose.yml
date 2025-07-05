@@ -1,9 +1,6 @@
 networks:
   localstack-network:
 
-# volumes:
-#   localstack-data:
-
 services:
   localstack:
     container_name: localstack-main
@@ -14,11 +11,9 @@ services:
       - SERVICES=s3,dynamodb,kms,iam
       - DEBUG=1
       - PERSISTENCE=0
-      # - DATA_DIR=/tmp/localstack/data
       - DOCKER_HOST=unix:///var/run/docker.sock
       - SKIP_INFRA_DOWNLOADS=1
     volumes:
-      # - './data:/var/lib/localstack'
       - '/var/run/docker.sock:/var/run/docker.sock'
     networks:
       - localstack-network
@@ -60,30 +55,9 @@ services:
         condition: service_completed_successfully
 
     build:
-      context: ./infra-prov-test-runner
+      context: ./infra-provisioning-test
     volumes:
-      - './infra-prov-test-runner/tests:/tests'
-    profiles: [test]
-    working_dir: /tests
-    command: pytest infra/
-
-    environment:
-      - AWS_ENDPOINT_URL=http://localstack:4566
-      - AWS_DEFAULT_REGION=us-west-1
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
-    networks:
-      - localstack-network
-
-  integration-tests:
-    depends_on:
-      terraform-local-runner:
-        condition: service_completed_successfully
-
-    build:
-      context: ./integration-tests/runner
-    volumes:
-      - './infra-prov-test-runner/tests:/tests'
+      - './infra-provisioning-test/tests:/tests'
     profiles: [test]
     working_dir: /tests
     command: pytest infra/

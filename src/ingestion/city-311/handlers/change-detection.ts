@@ -1,5 +1,4 @@
 import TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
-import { getEnvVar } from 'src/lib/config/internal/env-loader';
 import { City311ApiClient } from '../clients/socrata-311-api-client';
 import City311Extractor from '../extractor';
 import { MyLA311ServiceRequest } from 'src/lib/types/models/city-311-report';
@@ -8,6 +7,7 @@ import logger, {
   buildBaseLogContext,
   buildErrorLog,
 } from 'src/lib/logs/logger';
+import { getEnvVar } from 'src/lib/config/env';
 
 export default async function handler(event, context): Promise<void> {
   const baseLogContext: Partial<CustomLogDescriptor> = buildBaseLogContext(

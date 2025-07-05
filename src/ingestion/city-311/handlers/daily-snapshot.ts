@@ -1,9 +1,9 @@
-import { getEnvVar } from 'src/lib/config/internal/env-loader';
 import { City311ApiClient } from '../clients/socrata-311-api-client';
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 import BlobStorageClient from 'src/lib/clients/infrastructure/blob/blob-client';
 import { MyLA311ServiceRequest } from 'src/lib/types/models/city-311-report';
 import City311Extractor from '../extractor';
+import { getEnvVar } from 'src/lib/config/env';
 
 export default async function handler(event, context): Promise<void> {
   try {

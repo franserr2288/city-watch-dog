@@ -9,7 +9,7 @@
     "module": "ESNext",
     "rootDir": ".",
     "moduleResolution": "bundler",
-    "typeRoots":["./node_modules/@types", "tools/scripts/types"],
+    "typeRoots": ["./node_modules/@types", "tools/scripts/types"],
     "noEmit": true,
     "baseUrl": ".",
     "removeComments": true,
@@ -22,7 +22,11 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "tools/scripts/**tools/scripts/types/**/*s/**/*"],
+  "include": [
+    "tests/**/*",
+    "src/**/*",
+    "tools/scripts/**tools/scripts/types/**/*s/**/*"
+  ],
   "ts-node": {
     "esm": true,
     "require": ["tsconfig-paths/register"]

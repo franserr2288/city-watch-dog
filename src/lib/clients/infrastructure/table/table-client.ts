@@ -100,8 +100,7 @@ export default class TableStorageClient<TDataType> {
     };
     const command = new BatchGetCommand(input);
     const response: BatchGetCommandOutput = await this.dynamodb.send(command);
-    const items = response.Responses?.[this.tableName] || [];
-    return items;
+    return response.Responses?.[this.tableName] || [];
   }
 
   private async batchWriteWithRetry(
