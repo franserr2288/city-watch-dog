@@ -8,12 +8,12 @@ import type {
   ConfigTableExpectedShape,
 } from 'src/lib/logs/types/behaviors/pagination';
 import TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
-import { getEnvVar } from 'src/lib/config/internal/env-loader';
 import {
   ConfigTableUseCases,
   constructConfigKey,
 } from 'src/lib/clients/infrastructure/table/table-utils';
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
+import { getEnvVar } from 'src/lib/config/env';
 
 export class City311ApiClient
   extends SocrataClientBase
