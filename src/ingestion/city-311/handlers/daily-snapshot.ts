@@ -4,8 +4,15 @@ import BlobStorageClient from 'src/lib/clients/infrastructure/blob/blob-client';
 import { ServiceRequest } from 'src/lib/logs/types/models/service-request';
 import City311Extractor from '../extractor';
 import { getEnvVar } from 'src/lib/config/env';
+import {
+  GenerateSuccessMessage,
+  type LambdaTimeTriggerEventResponse,
+} from 'src/lib/logs/types/responses/time-trigger-lambda-response';
 
-export default async function handler(event, context): Promise<void> {
+export default async function handler(
+  event,
+  context,
+): Promise<LambdaTimeTriggerEventResponse> {
   try {
     console.log(`EVENT DATA ${event}`);
     console.log(`EXCECUTION CONTEXT ${context}`);
@@ -22,6 +29,7 @@ export default async function handler(event, context): Promise<void> {
       dataGenerator: dataExtractor.snapshot(),
       compress: true,
     });
+    return GenerateSuccessMessage('daily-snapshot');
   } catch (error) {
     console.error('Error occurred in scheduled Lambda:', error);
     throw error;

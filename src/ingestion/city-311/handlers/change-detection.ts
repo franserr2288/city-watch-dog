@@ -8,8 +8,15 @@ import logger, {
   buildErrorLog,
 } from 'src/lib/logs/logger';
 import { getEnvVar } from 'src/lib/config/env';
+import {
+  GenerateSuccessMessage,
+  type LambdaTimeTriggerEventResponse,
+} from 'src/lib/logs/types/responses/time-trigger-lambda-response';
 
-export default async function handler(event, context): Promise<void> {
+export default async function handler(
+  event,
+  context,
+): Promise<LambdaTimeTriggerEventResponse> {
   const baseLogContext: Partial<CustomLogDescriptor> = buildBaseLogContext(
     context,
     'change-detection',
@@ -37,6 +44,7 @@ export default async function handler(event, context): Promise<void> {
       logger.debug(baseLogContext, `Processing chunk`);
     }
     logger.info(baseLogContext, 'Lambda execution completed successfully');
+    return GenerateSuccessMessage('change-detection');
   } catch (error) {
     const errorInfo: Partial<CustomLogDescriptor> = buildErrorLog(
       error,

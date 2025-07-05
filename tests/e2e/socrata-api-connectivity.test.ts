@@ -1,6 +1,9 @@
 import type { City311ExternalModel } from 'src/ingestion/city-311/clients/city-311-report-schema';
 import { City311ApiClient } from 'src/ingestion/city-311/clients/socrata-311-api-client';
-import type { BatchResult } from 'src/lib/logs/types/behaviors/pagination';
+import type {
+  BatchResult,
+  City311PaginationCursor,
+} from 'src/lib/logs/types/behaviors/pagination';
 
 describe('City311ApiClient Live API Workflows', () => {
   let apiClient: City311ApiClient;
@@ -38,7 +41,7 @@ describe('City311ApiClient Live API Workflows', () => {
       console.log(
         `Sample record: SR# ${firstRecord.srnumber}, Type: ${firstRecord.requesttype}`,
       );
-    }, 30_000); // 30 second timeout for network calls
+    }, 30_000);
   });
 
   describe('Change Detection Workflow', () => {
@@ -46,12 +49,10 @@ describe('City311ApiClient Live API Workflows', () => {
       const batches: BatchResult<City311ExternalModel>[] = [];
       let totalRecords = 0;
 
-      // change detection for recent records only
       for await (const batch of apiClient.detectNewRecordsAndUpdatedRecordsSinceLastCheck()) {
         batches.push(batch);
         totalRecords += batch.data.length;
 
-        // prevent long-running test
         if (totalRecords >= 100 || batches.length >= 3) {
           break;
         }
@@ -68,29 +69,28 @@ describe('City311ApiClient Live API Workflows', () => {
         expect(currDate.getTime()).toBeGreaterThanOrEqual(prevDate.getTime());
       }
 
-      console.log(`✅ Change detection: Found ${totalRecords} recent records`);
-      console.log(`📊 Processed ${batches.length} batches successfully`);
-    }, 45000); // 45 second timeout
+      console.log(`Change detection: Found ${totalRecords} recent records`);
+      console.log(`Processed ${batches.length} batches successfully`);
+    }, 45_000);
   });
 
   describe('Pagination Workflow', () => {
     it('should handle pagination cursors correctly with live data', async () => {
       const batches: BatchResult<City311ExternalModel>[] = [];
-      let previousCursor = null;
+      let previousCursor: City311PaginationCursor | null = null;
 
-      // Test pagination by getting multiple small batches
+      // get multiple small batches
       for await (const batch of apiClient.getSnapshotBatches()) {
         batches.push(batch);
 
-        // Verify cursor progression
+        // check if cursor is moving forward
         if (previousCursor && batch.cursor) {
-          // Cursor should change between batches
+          // cursor should change between batches
           expect(batch.cursor).not.toEqual(previousCursor);
         }
 
         previousCursor = batch.cursor;
 
-        // Limit to 3 batches for test performance
         if (batches.length >= 3) {
           break;
         }
@@ -98,7 +98,7 @@ describe('City311ApiClient Live API Workflows', () => {
 
       expect(batches.length).toBeGreaterThan(0);
 
-      // Verify no duplicate records across batches
+      // verify no duplicate records across batches
       const allSRNumbers = batches.flatMap((batch) =>
         batch.data.map((record) => record.srnumber),
       );
@@ -106,8 +106,8 @@ describe('City311ApiClient Live API Workflows', () => {
       expect(uniqueSRNumbers.size).toBe(allSRNumbers.length);
 
       console.log(
-        `✅ Pagination test: ${batches.length} batches, ${allSRNumbers.length} unique records`,
+        `Pagination test: ${batches.length} batches, ${allSRNumbers.length} unique records`,
       );
-    }, 60000); // 60 second timeout
+    }, 60_000);
   });
 });
