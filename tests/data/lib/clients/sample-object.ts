@@ -1,4 +1,4 @@
-import { MyLA311ServiceRequest } from 'src/lib/types/models/city-311-report';
+import { ServiceRequest } from 'src/lib/logs/types/models/service-request';
 
 const object = {
   srnumber: '1-5100398541',
@@ -39,4 +39,4 @@ const object = {
   ncname: 'Coastal San Pedro',
   policeprecinct: 'HARBOR',
 };
-export const samplePayload = MyLA311ServiceRequest.fromAPIJSON(object);
+export const samplePayload = ServiceRequest.fromAPIJSON(object);

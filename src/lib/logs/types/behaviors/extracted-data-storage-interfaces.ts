@@ -1,4 +1,4 @@
-import { DataSource } from '../../clients/socrata/socrata-constants';
+import { DataSource } from '../../../clients/socrata/socrata-constants';
 
 // BLOB STORAGE INTERFACES
 

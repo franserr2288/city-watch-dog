@@ -1,12 +1,12 @@
 import { SocrataClientBase } from 'src/lib/clients/socrata/socrata-base-client';
-import type { City311DataRequestNeeds } from 'src/lib/types/behaviors/ingestion';
+import type { City311DataRequestNeeds } from 'src/lib/logs/types/behaviors/ingestion';
 import { city311ApiEndpointContract } from '../../../lib/clients/socrata/socrata-api-contract';
-import type { City311Report } from './city-311-report-schema';
+import type { City311ExternalModel } from './city-311-report-schema';
 import type {
   BatchResult,
   City311PaginationCursor,
   ConfigTableExpectedShape,
-} from 'src/lib/types/behaviors/pagination';
+} from 'src/lib/logs/types/behaviors/pagination';
 import TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
 import { getEnvVar } from 'src/lib/config/internal/env-loader';
 import {
@@ -31,7 +31,7 @@ export class City311ApiClient
     );
   }
   public async *detectNewRecordsAndUpdatedRecordsSinceLastCheck(): AsyncGenerator<
-    BatchResult<City311Report>,
+    BatchResult<City311ExternalModel>,
     void,
     unknown
   > {
@@ -39,7 +39,7 @@ export class City311ApiClient
   }
 
   public async *getSnapshotBatches(): AsyncGenerator<
-    BatchResult<City311Report>,
+    BatchResult<City311ExternalModel>,
     void,
     unknown
   > {
@@ -47,7 +47,7 @@ export class City311ApiClient
   }
 
   public async *getBackfillBatches(): AsyncGenerator<
-    BatchResult<City311Report>,
+    BatchResult<City311ExternalModel>,
     void,
     unknown
   > {
@@ -56,7 +56,7 @@ export class City311ApiClient
 
   private async *getHistoricalBatchIterator(
     checkpointProgress: boolean,
-  ): AsyncGenerator<BatchResult<City311Report>, void, unknown> {
+  ): AsyncGenerator<BatchResult<City311ExternalModel>, void, unknown> {
     const cursor: City311PaginationCursor | null = null;
 
     yield* this.processCursor(cursor, checkpointProgress, QueryType.NewRecords);
@@ -74,9 +74,9 @@ export class City311ApiClient
   }
 
   public async *getNewAndUpdatedRecordsSinceLastCheck(
-    lastCheck: BatchResult<City311Report> | null,
+    lastCheck: BatchResult<City311ExternalModel> | null,
     checkpointProgress: boolean,
-  ): AsyncGenerator<BatchResult<City311Report>, void, unknown> {
+  ): AsyncGenerator<BatchResult<City311ExternalModel>, void, unknown> {
     let cursor: City311PaginationCursor | null = null;
     if (lastCheck) {
       cursor = lastCheck.cursor;
@@ -152,7 +152,7 @@ export class City311ApiClient
       }
       totalRecordsProcessed += response.length;
 
-      const batchResult: BatchResult<City311Report> = {
+      const batchResult: BatchResult<City311ExternalModel> = {
         cursor,
         data: response,
         hasMore: hasMoreRecords,
@@ -188,7 +188,7 @@ export class City311ApiClient
     where?: string;
     requestType?: string;
     status?: string;
-  }): Promise<Array<City311Report>> {
+  }): Promise<Array<City311ExternalModel>> {
     const query = {
       $limit: params.limit,
       $order: params.orderBy,

@@ -40,6 +40,6 @@ const City311ReportSchema = z.object({
 
 export default City311ReportSchema;
 
-export type City311Report = z.infer<typeof City311ReportSchema>;
+export type City311ExternalModel = z.infer<typeof City311ReportSchema>;
 
-export type City311Reports = Array<City311Report>;
+export type City311Reports = Array<City311ExternalModel>;

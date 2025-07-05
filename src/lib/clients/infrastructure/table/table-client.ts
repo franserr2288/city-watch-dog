@@ -16,12 +16,12 @@ import {
   ConfigTableUseCases,
   constructConfigKey,
 } from './table-utils';
-import { MyLA311ServiceRequest } from 'src/lib/types/models/city-311-report';
+import { ServiceRequest } from 'src/lib/logs/types/models/service-request';
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 import type {
   City311PaginationCursor,
   ConfigTableExpectedShape,
-} from 'src/lib/types/behaviors/pagination';
+} from 'src/lib/logs/types/behaviors/pagination';
 import { getEnvVar } from 'src/lib/config/env';
 import { createDynamoClient } from './client-factory';
 
@@ -85,9 +85,9 @@ export default class TableStorageClient<TDataType> {
 
   public async getCity311Data(
     dataKeys: string[],
-  ): Promise<Array<MyLA311ServiceRequest>> {
+  ): Promise<Array<ServiceRequest>> {
     const items = await this.getData(dataKeys, 'sr_number');
-    return items.map((i) => MyLA311ServiceRequest.fromAPIJSON(i));
+    return items.map((i) => ServiceRequest.fromAPIJSON(i));
   }
 
   private async getData(dataKeys: string[], hashKeyName: string) {

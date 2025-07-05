@@ -1,11 +1,11 @@
 import TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
 import { getEnvVar } from 'src/lib/config/env';
-import type { MyLA311ServiceRequest } from 'src/lib/types/models/city-311-report';
+import type { ServiceRequest } from 'src/lib/logs/types/models/service-request';
 import { samplePayload } from '../../data/lib/clients/sample-object';
 import { beforeEach, describe, it } from 'node:test';
 
 describe('TableStorageClient Lifecycle', () => {
-  let tableClient: TableStorageClient<MyLA311ServiceRequest>;
+  let tableClient: TableStorageClient<ServiceRequest>;
 
   beforeEach(() => {
     tableClient = new TableStorageClient(getEnvVar('DAILY_SNAPSHOT_BUCKET'));
@@ -26,7 +26,7 @@ describe('TableStorageClient Lifecycle', () => {
   it('should handle multiple records in lifecycle', async () => {
     const multiplePayloads = [
       samplePayload,
-      { ...samplePayload, sr_number: 'SR2024-456' } as MyLA311ServiceRequest,
+      { ...samplePayload, sr_number: 'SR2024-456' } as ServiceRequest,
     ];
 
     await tableClient.storeData(multiplePayloads);

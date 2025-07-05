@@ -1,11 +1,11 @@
 import City311ReportSchema, {
-  type City311Report,
-} from '../../../ingestion/city-311/clients/city-311-report-schema';
+  type City311ExternalModel,
+} from '../../../../ingestion/city-311/clients/city-311-report-schema';
 /**
  * MyLA311 Service Request Data Model
  * Represents a service request from the Los Angeles 311 system
  */
-export class MyLA311ServiceRequest {
+export class ServiceRequest {
   /** Unique service request identifier */
   public sr_number: string;
 
@@ -100,7 +100,7 @@ export class MyLA311ServiceRequest {
   /** Police precinct/division */
   public police_precint: string | null;
 
-  constructor(data: Partial<MyLA311ServiceRequest> = {}) {
+  constructor(data: Partial<ServiceRequest> = {}) {
     this.sr_number = data.sr_number || '';
     this.created_date = data.created_date || new Date().toISOString();
     this.updated_date = data.updated_date || null;
@@ -234,9 +234,9 @@ export class MyLA311ServiceRequest {
   /**
    * Create a new instance from a plain object (e.g., from API response)
    */
-  public static fromAPIJSON(data: unknown): MyLA311ServiceRequest {
-    const parsedData: City311Report = City311ReportSchema.parse(data);
-    const instance = new MyLA311ServiceRequest();
+  public static fromAPIJSON(data: unknown): ServiceRequest {
+    const parsedData: City311ExternalModel = City311ReportSchema.parse(data);
+    const instance = new ServiceRequest();
 
     instance.sr_number = parsedData.srnumber || '';
     instance.created_date = parsedData.createddate
@@ -296,7 +296,7 @@ export class MyLA311ServiceRequest {
  * Type alias for creating new service requests with optional fields
  */
 export type CreateServiceRequestData = Partial<
-  Omit<MyLA311ServiceRequest, 'SRNumber' | 'CreatedDate'>
+  Omit<ServiceRequest, 'SRNumber' | 'CreatedDate'>
 > & {
   RequestType: string;
 };
@@ -305,7 +305,7 @@ export type CreateServiceRequestData = Partial<
  * Type alias for updating existing service requests
  */
 export type UpdateServiceRequestData = Partial<
-  Omit<MyLA311ServiceRequest, 'SRNumber' | 'CreatedDate'>
+  Omit<ServiceRequest, 'SRNumber' | 'CreatedDate'>
 >;
 
 /**

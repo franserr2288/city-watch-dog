@@ -1,11 +1,11 @@
 import { samplePayload } from '../../data/lib/clients/sample-object';
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 import BlobStorageClient from 'src/lib/clients/infrastructure/blob/blob-client';
-import { MyLA311ServiceRequest } from 'src/lib/types/models/city-311-report';
+import { ServiceRequest } from 'src/lib/logs/types/models/service-request';
 import { getEnvVar } from 'src/lib/config/env';
 
 describe('BlobStorageClient Lifecycle', () => {
-  let blobClient: BlobStorageClient<MyLA311ServiceRequest>;
+  let blobClient: BlobStorageClient<ServiceRequest>;
   const testDataSource = DataSource.Requests311;
 
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe('BlobStorageClient Lifecycle', () => {
     it('should store small dataset and retrieve metadata', async () => {
       const testData = [
         samplePayload,
-        { ...samplePayload, sr_number: 'SR2024-456' } as MyLA311ServiceRequest,
+        { ...samplePayload, sr_number: 'SR2024-456' } as ServiceRequest,
       ];
 
       const storeResult = await blobClient.storeSmallDataSet(
@@ -41,7 +41,7 @@ describe('BlobStorageClient Lifecycle', () => {
     });
 
     it('should handle empty dataset storage', async () => {
-      const emptyData: MyLA311ServiceRequest[] = [];
+      const emptyData: ServiceRequest[] = [];
 
       const storeResult = await blobClient.storeSmallDataSet(
         testDataSource,
@@ -65,13 +65,13 @@ describe('BlobStorageClient Lifecycle', () => {
           {
             ...samplePayload,
             sr_number: 'SR2024-456',
-          } as MyLA311ServiceRequest,
+          } as ServiceRequest,
         ],
         [
           {
             ...samplePayload,
             sr_number: 'SR2024-789',
-          } as MyLA311ServiceRequest,
+          } as ServiceRequest,
         ],
       ];
 
@@ -92,7 +92,7 @@ describe('BlobStorageClient Lifecycle', () => {
         recordCount: 3,
       });
 
-      const retrievedBatches: MyLA311ServiceRequest[][] = [];
+      const retrievedBatches: ServiceRequest[][] = [];
 
       for await (const batch of blobClient.streamDataFromS3(testDataSource, {
         batchSize: 2,
@@ -116,7 +116,7 @@ describe('BlobStorageClient Lifecycle', () => {
         {
           ...samplePayload,
           sr_number: 'SR2024-COMPRESSED',
-        } as MyLA311ServiceRequest,
+        } as ServiceRequest,
       ];
 
       async function* compressedDataGenerator() {
@@ -133,7 +133,7 @@ describe('BlobStorageClient Lifecycle', () => {
         recordCount: 2,
       });
 
-      const retrievedBatches: MyLA311ServiceRequest[][] = [];
+      const retrievedBatches: ServiceRequest[][] = [];
 
       for await (const batch of blobClient.streamDataFromS3(testDataSource, {
         compressed: true,
@@ -161,13 +161,13 @@ describe('BlobStorageClient Lifecycle', () => {
           {
             ...samplePayload,
             sr_number: 'SR2024-STREAM1',
-          } as MyLA311ServiceRequest,
+          } as ServiceRequest,
         ];
         yield [
           {
             ...samplePayload,
             sr_number: 'SR2024-STREAM2',
-          } as MyLA311ServiceRequest,
+          } as ServiceRequest,
         ];
       }
 
@@ -186,7 +186,7 @@ describe('BlobStorageClient Lifecycle', () => {
       expect(metadata?.recordCount).toBe(2);
 
       // Verify we can retrieve the streamed data
-      const retrievedBatches: MyLA311ServiceRequest[][] = [];
+      const retrievedBatches: ServiceRequest[][] = [];
 
       for await (const batch of blobClient.streamDataFromS3(testDataSource)) {
         retrievedBatches.push(batch);
@@ -200,24 +200,4 @@ describe('BlobStorageClient Lifecycle', () => {
       ]);
     });
   });
-
-  //   describe('Error Scenarios', () => {
-  //     it('should handle retrieval from non-existent data source', async () => {
-  //       const nonExistentSource = 'non-existent-source' as any;
-
-  //       // Should handle gracefully when no data exists
-  //       await expect(async () => {
-  //         const batches = [];
-  //         for await (const batch of blobClient.streamDataFromS3(
-  //           nonExistentSource,
-  //         )) {
-  //           batches.push(batch);
-  //         }
-  //       }).rejects.toThrow();
-
-  //       // Metadata should return null for non-existent source
-  //       const metadata = await blobClient.getMetadata(nonExistentSource);
-  //       expect(metadata).toBeNull();
-  //     });
-  //   });
 });
