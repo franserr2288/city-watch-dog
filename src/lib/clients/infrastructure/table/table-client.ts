@@ -16,14 +16,15 @@ import {
   ConfigTableUseCases,
   constructConfigKey,
 } from './table-utils';
-import { ServiceRequest } from 'src/lib/logs/types/models/service-request';
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
-import type {
-  City311PaginationCursor,
-  ConfigTableExpectedShape,
-} from 'src/lib/logs/types/behaviors/pagination';
+
 import { getEnvVar } from 'src/lib/config/env';
 import { createDynamoClient } from './client-factory';
+import type {
+  ConfigTableExpectedShape,
+  City311PaginationCursor,
+} from 'src/lib/types/behaviors/pagination';
+import { ServiceRequest } from 'src/lib/types/models/service-request';
 
 export default class TableStorageClient<TDataType> {
   private dynamodb: DynamoDBDocumentClient;

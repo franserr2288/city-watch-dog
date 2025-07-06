@@ -1,12 +1,12 @@
 import TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
 import { City311ApiClient } from '../clients/socrata-311-api-client';
 import City311Extractor from '../extractor';
-import { ServiceRequest } from 'src/lib/logs/types/models/service-request';
 import { getEnvVar } from 'src/lib/config/env';
 import {
   GenerateSuccessMessage,
   type LambdaTimeTriggerEventResponse,
-} from 'src/lib/logs/types/responses/time-trigger-lambda-response';
+} from 'src/lib/types/responses/time-trigger-lambda-response';
+import type { ServiceRequest } from 'src/lib/types/models/service-request';
 
 export default async function handler(
   event,

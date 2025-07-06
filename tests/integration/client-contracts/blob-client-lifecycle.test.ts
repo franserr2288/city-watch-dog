@@ -1,8 +1,8 @@
 import { samplePayload } from '../../data/lib/clients/sample-object';
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 import BlobStorageClient from 'src/lib/clients/infrastructure/blob/blob-client';
-import { ServiceRequest } from 'src/lib/logs/types/models/service-request';
 import { getEnvVar } from 'src/lib/config/env';
+import type { ServiceRequest } from 'src/lib/types/models/service-request';
 
 describe('BlobStorageClient Lifecycle', () => {
   let blobClient: BlobStorageClient<ServiceRequest>;

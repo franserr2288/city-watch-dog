@@ -1,7 +1,7 @@
-import type { BatchResult } from 'src/lib/logs/types/behaviors/pagination.ts';
 import type { City311ApiClient } from './clients/socrata-311-api-client.ts';
-import { ServiceRequest } from 'src/lib/logs/types/models/service-request.ts';
 import type { City311ExternalModel } from './clients/city-311-report-schema.ts';
+import type { BatchResult } from 'src/lib/types/behaviors/pagination.ts';
+import { ServiceRequest } from 'src/lib/types/models/service-request.ts';
 
 interface IIntakeExtractor<T> {
   backfill(): AsyncGenerator<Array<T>, void, unknown>;

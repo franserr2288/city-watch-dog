@@ -1,11 +1,12 @@
 export default {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   setupFiles: ['<rootDir>/tests/setup/env.ts'],
   roots: ['<rootDir>/src', '<rootDir>/tests'],
   testMatch: ['**/*.test.ts'],
-  // moduleNameMapping: {
-  //   '^src/(.*)$': '<rootDir>/src/$1',
-  //   '^tests/(.*)$': '<rootDir>/tests/$1',
-  // },
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleNameMapper: {
+    '^src/(.*)$': '<rootDir>/src/$1',
+    '^tests/(.*)$': '<rootDir>/tests/$1',
+  },
 };
