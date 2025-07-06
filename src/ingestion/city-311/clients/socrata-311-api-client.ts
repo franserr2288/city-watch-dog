@@ -1,12 +1,7 @@
 import { SocrataClientBase } from 'src/lib/clients/socrata/socrata-base-client';
-import type { City311DataRequestNeeds } from 'src/lib/logs/types/behaviors/ingestion';
 import { city311ApiEndpointContract } from '../../../lib/clients/socrata/socrata-api-contract';
 import type { City311ExternalModel } from './city-311-report-schema';
-import type {
-  BatchResult,
-  City311PaginationCursor,
-  ConfigTableExpectedShape,
-} from 'src/lib/logs/types/behaviors/pagination';
+
 import TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
 import {
   ConfigTableUseCases,
@@ -14,6 +9,12 @@ import {
 } from 'src/lib/clients/infrastructure/table/table-utils';
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 import { getEnvVar } from 'src/lib/config/env';
+import type { City311DataRequestNeeds } from 'src/lib/types/behaviors/ingestion';
+import type {
+  ConfigTableExpectedShape,
+  City311PaginationCursor,
+  BatchResult,
+} from 'src/lib/types/behaviors/pagination';
 
 export class City311ApiClient
   extends SocrataClientBase

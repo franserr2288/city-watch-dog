@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { getEnvVar } from '../env';
 
 enum HostLocation {
   Local = 'localhost',
@@ -39,7 +38,7 @@ export class EnvironmentDetector {
   private static getInfrastructureTarget(): InfrastructureTarget {
     const location = this.getHostLocation();
 
-    if (location === HostLocation.Cloud || getEnvVar('TARGET_ENV') === 'aws') {
+    if (location === HostLocation.Cloud || process.env.TARGET_ENV === 'aws') {
       return InfrastructureTarget.Aws;
     }
 

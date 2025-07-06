@@ -1,1 +1,1 @@
-process.env.USE_AWS = 'false';
+process.env.TARGET_ENV = 'localstack';
