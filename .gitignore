@@ -34,7 +34,10 @@ Thumbs.db
 *.bak
 *.log
 .idea/
-.vscode/
+# VS Code personal settings (ignored)
+.vscode/*
+# Debug configuration included for portfolio reviewers
+!.vscode/launch.example.json
 
 # MacOS metadata
 .DS_Store
@@ -46,10 +49,9 @@ htmlcov/
 *.log
 *.out
 
-# Git submodules – ignore contents, not the folder (for core submodule)
 core/*
 !core/.gitmodules
-!core/.gitkeep  # optional placeholder to show folder exists
+!core/.gitkeep
 
 # Docs / generated files
 docs/*.pdf
