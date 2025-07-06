@@ -12,19 +12,21 @@ export const ensureEnvLoaded = () => {
   const envFiles = {
     local: '.env.localstack',
     dev: '.env.dev',
+    base: '.env',
   };
   const target = EnvironmentDetector.willTargetLocalstackEndpoints()
     ? 'local'
     : 'dev';
 
   const fileName = envFiles[target];
-  const envsDir = findUpSync('.envs', { type: 'directory' });
+  const envsDir = findUpSync('envs', { type: 'directory' });
 
   if (envsDir) {
     const envPath = path.join(envsDir, fileName);
+    const baseEnvPath = path.join(envsDir, envFiles['base']);
 
     if (fs.existsSync(envPath)) {
-      config();
+      config({ path: baseEnvPath });
       config({ path: envPath });
     } else {
       console.warn(
