@@ -1,8 +1,10 @@
 import handler from 'src/ingestion/city-311/handlers/daily-snapshot';
 import { snapshotContext } from 'tests/data/city-311/lambda-context';
 import { eventBridgeLambdaEvent } from 'tests/data/city-311/timed-trigger-event';
+import { setupInfraCleanup } from 'tests/setup/infrastructure-cleanup';
 
 describe('Daily Snapshot Generation workflow test', () => {
+  setupInfraCleanup();
   it('should handle daily snapshot generation workflow', async () => {
     console.log('Starting snapshot generation workflow test...');
 

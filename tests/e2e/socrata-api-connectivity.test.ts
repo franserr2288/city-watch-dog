@@ -4,6 +4,7 @@ import type {
   BatchResult,
   City311PaginationCursor,
 } from 'src/lib/logs/types/behaviors/pagination';
+import { setupInfraCleanup } from 'tests/setup/infrastructure-cleanup';
 
 describe('City311ApiClient Live API Workflows', () => {
   let apiClient: City311ApiClient;
@@ -11,6 +12,7 @@ describe('City311ApiClient Live API Workflows', () => {
   beforeAll(() => {
     apiClient = new City311ApiClient();
   });
+  setupInfraCleanup();
 
   describe('Live API Connectivity', () => {
     it('should successfully fetch a small batch of real 311 data', async () => {
