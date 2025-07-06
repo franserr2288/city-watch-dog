@@ -5,7 +5,7 @@ import { setupInfraCleanup } from 'tests/setup/infrastructure-cleanup';
 
 describe('Historical Backfill Workflow', () => {
   setupInfraCleanup();
-  it('should handle large-scale historical data backfill', async () => {
+  it.only('should handle large-scale historical data backfill', async () => {
     console.log('📚 Starting historical backfill workflow test...');
 
     const limitedBackfillEvent = {

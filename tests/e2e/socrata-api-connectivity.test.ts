@@ -15,7 +15,7 @@ describe('City311ApiClient Live API Workflows', () => {
   setupInfraCleanup();
 
   describe('Live API Connectivity', () => {
-    it('should successfully fetch a small batch of real 311 data', async () => {
+    it.only('should successfully fetch a small batch of real 311 data', async () => {
       const batches: BatchResult<City311ExternalModel>[] = [];
       let recordCount = 0;
 

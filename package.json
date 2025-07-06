@@ -9,7 +9,10 @@
     "#source-intake/*": "./src/source-intake/*"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:e2e": "jest tests/e2e/",
+    "test:integration": "jest tests/integration/"
   },
   "repository": {
     "type": "git",
