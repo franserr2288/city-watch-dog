@@ -1,4 +1,4 @@
-import { ServiceRequest } from 'src/lib/logs/types/models/service-request';
+import { ServiceRequest } from 'src/lib/types/models/service-request';
 
 const object = {
   srnumber: '1-5100398541',

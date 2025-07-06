@@ -1,4 +1,4 @@
-import TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
+import { ServiceRequestTableClient } from 'src/lib/clients/infrastructure/table/table-client';
 import { City311ApiClient } from '../clients/socrata-311-api-client';
 import City311Extractor from '../extractor';
 import type { CustomLogDescriptor } from 'src/lib/logs/base-log-shape';
@@ -11,7 +11,6 @@ import {
   GenerateSuccessMessage,
   type LambdaTimeTriggerEventResponse,
 } from 'src/lib/types/responses/time-trigger-lambda-response';
-import type { ServiceRequest } from 'src/lib/types/models/service-request';
 
 export default async function handler(
   event,
@@ -34,8 +33,8 @@ export default async function handler(
     logger.debug(baseLogContext, 'Initializing clients and extractor');
 
     const dataSourceApiClient = new City311ApiClient();
-    const inTakeTableStorageCLient: TableStorageClient<ServiceRequest> =
-      new TableStorageClient(getEnvVar('DAILY_SNAPSHOT_BUCKET'));
+    const inTakeTableStorageCLient: ServiceRequestTableClient =
+      new ServiceRequestTableClient(getEnvVar('DAILY_SNAPSHOT_BUCKET'));
     const dataExtractor: City311Extractor = new City311Extractor(
       dataSourceApiClient,
     );

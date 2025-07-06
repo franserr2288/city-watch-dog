@@ -2,7 +2,7 @@ import { SocrataClientBase } from 'src/lib/clients/socrata/socrata-base-client';
 import { city311ApiEndpointContract } from '../../../lib/clients/socrata/socrata-api-contract';
 import type { City311ExternalModel } from './city-311-report-schema';
 
-import TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
+import { CheckpointTableClient } from 'src/lib/clients/infrastructure/table/table-client';
 import {
   ConfigTableUseCases,
   constructConfigKey,
@@ -21,13 +21,11 @@ export class City311ApiClient
   implements City311DataRequestNeeds
 {
   private readonly BATCH_SIZE = 40_000;
-  private checkpointTableClient: TableStorageClient<
-    ConfigTableExpectedShape<City311PaginationCursor>
-  >;
+  private checkpointTableClient: CheckpointTableClient;
 
   constructor() {
     super(city311ApiEndpointContract);
-    this.checkpointTableClient = new TableStorageClient(
+    this.checkpointTableClient = new CheckpointTableClient(
       getEnvVar('CONFIG_TABLE'),
     );
   }

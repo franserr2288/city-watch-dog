@@ -27,10 +27,6 @@ interface SnapshotPayload<T> {
   };
   data: T[];
 }
-// interface SnapshotPayload<T> extends SnapshotMetadata {
-//   data: T[];
-// }
-
 export default class BlobStorageClient<T> {
   private s3: S3Client;
   private bucketName: string;

@@ -26,7 +26,7 @@ import type {
 } from 'src/lib/types/behaviors/pagination';
 import { ServiceRequest } from 'src/lib/types/models/service-request';
 
-export default class TableStorageClient<TDataType> {
+class TableStorageClient<TDataType> {
   private dynamodb: DynamoDBDocumentClient;
   constructor(
     private tableName: string,
@@ -57,41 +57,8 @@ export default class TableStorageClient<TDataType> {
       await this.batchWriteWithRetry(chunkPutRequests);
     }
   }
-  public async getBackfillRecord(): Promise<
-    ConfigTableExpectedShape<City311PaginationCursor> | undefined
-  > {
-    const dataKey: string = constructConfigKey(
-      ConfigTableUseCases.IntakeBackfillCompleted,
-      DataSource.Requests311,
-    );
-    const response = await this.getData([dataKey], 'config_key');
-    return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
-  }
-  public async getBatchedProcessRecord() {
-    const dataKey: string = constructConfigKey(
-      ConfigTableUseCases.IntakeBatchingProgressCheckpoints,
-      DataSource.Requests311,
-    );
-    const response = await this.getData([dataKey], 'config_key');
-    return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
-  }
-  public async getLastUpdateRecord() {
-    const dataKey: string = constructConfigKey(
-      ConfigTableUseCases.ChangeDetectionLayer,
-      DataSource.Requests311,
-    );
-    const response = await this.getData([dataKey], 'config_key');
-    return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
-  }
 
-  public async getCity311Data(
-    dataKeys: string[],
-  ): Promise<Array<ServiceRequest>> {
-    const items = await this.getData(dataKeys, 'sr_number');
-    return items.map((i) => ServiceRequest.fromAPIJSON(i));
-  }
-
-  private async getData(dataKeys: string[], hashKeyName: string) {
+  protected async getData(dataKeys: string[], hashKeyName: string) {
     const input: BatchGetCommandInput = {
       RequestItems: {
         [this.tableName]: {
@@ -133,5 +100,43 @@ export default class TableStorageClient<TDataType> {
       }
       currentRequests = unprocessed[this.tableName]!;
     }
+  }
+}
+export class ServiceRequestTableClient extends TableStorageClient<ServiceRequest> {
+  public async getCity311Data(
+    dataKeys: string[],
+  ): Promise<Array<ServiceRequest>> {
+    const items = await this.getData(dataKeys, 'sr_number');
+    return items.map((i) => ServiceRequest.fromAPIJSON(i));
+  }
+}
+export class CheckpointTableClient extends TableStorageClient<
+  ConfigTableExpectedShape<City311PaginationCursor>
+> {
+  public async getBackfillRecord(): Promise<
+    ConfigTableExpectedShape<City311PaginationCursor> | undefined
+  > {
+    const dataKey: string = constructConfigKey(
+      ConfigTableUseCases.IntakeBackfillCompleted,
+      DataSource.Requests311,
+    );
+    const response = await this.getData([dataKey], 'config_key');
+    return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
+  }
+  public async getBatchedProcessRecord() {
+    const dataKey: string = constructConfigKey(
+      ConfigTableUseCases.IntakeBatchingProgressCheckpoints,
+      DataSource.Requests311,
+    );
+    const response = await this.getData([dataKey], 'config_key');
+    return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
+  }
+  public async getLastUpdateRecord() {
+    const dataKey: string = constructConfigKey(
+      ConfigTableUseCases.ChangeDetectionLayer,
+      DataSource.Requests311,
+    );
+    const response = await this.getData([dataKey], 'config_key');
+    return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
   }
 }
