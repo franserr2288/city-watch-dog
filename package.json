@@ -4,10 +4,6 @@
   "description": "",
   "type": "module",
   "main": "index.js",
-  "imports": {
-    "#shared/*": "./src/shared/*",
-    "#source-intake/*": "./src/source-intake/*"
-  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
