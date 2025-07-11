@@ -13,7 +13,7 @@ describe('City311ApiClient Live API Workflows', () => {
   });
 
   describe('Live API Connectivity', () => {
-    it.only('should successfully fetch a small batch of real 311 data', async () => {
+    it('should successfully fetch a small batch of real 311 data', async () => {
       const batches: BatchResult<City311ExternalModel>[] = [];
       let recordCount = 0;
 
@@ -45,7 +45,7 @@ describe('City311ApiClient Live API Workflows', () => {
   });
 
   describe('Change Detection Workflow', () => {
-    it('should detect recent changes from live API', async () => {
+    it.only('should detect recent changes from live API', async () => {
       const batches: BatchResult<City311ExternalModel>[] = [];
       let totalRecords = 0;
 

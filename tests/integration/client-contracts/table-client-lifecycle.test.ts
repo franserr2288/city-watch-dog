@@ -1,14 +1,16 @@
-import TableStorageClient from 'src/lib/clients/infrastructure/table/table-client';
+import { ServiceRequestTableClient } from 'src/lib/clients/infrastructure/table/table-client';
 import { getEnvVar } from 'src/lib/config/env';
-import type { ServiceRequest } from 'src/lib/logs/types/models/service-request';
 import { samplePayload } from '../../data/lib/clients/sample-object';
 import { beforeEach, describe, it } from 'node:test';
+import type { ServiceRequest } from 'src/lib/types/models/service-request';
 
 describe('TableStorageClient Lifecycle', () => {
-  let tableClient: TableStorageClient<ServiceRequest>;
+  let tableClient: ServiceRequestTableClient;
 
   beforeEach(() => {
-    tableClient = new TableStorageClient(getEnvVar('DAILY_SNAPSHOT_BUCKET'));
+    tableClient = new ServiceRequestTableClient(
+      getEnvVar('DAILY_SNAPSHOT_BUCKET'),
+    );
   });
 
   it('should complete full data lifecycle: store and retrieve', async () => {
