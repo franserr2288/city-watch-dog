@@ -20,7 +20,8 @@
       "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**"],
       "env": {
-        "NODE_OPTIONS": "--experimental-vm-modules"
+        "NODE_OPTIONS": "--experimental-vm-modules",
+        "AWS_PROFILE": ""
       }
     },
     {
@@ -33,7 +34,8 @@
       "internalConsoleOptions": "neverOpen",
       "skipFiles": ["<node_internals>/**"],
       "env": {
-        "NODE_OPTIONS": "--experimental-vm-modules"
+        "NODE_OPTIONS": "--experimental-vm-modules",
+        "AWS_PROFILE": ""
       }
     }
   ]
