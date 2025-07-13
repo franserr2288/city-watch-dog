@@ -1,20 +1,15 @@
-module "source_intake_s3_storage" { 
-  source = "../../modules/s3"
-  project     = var.project
-  environment = var.environment
-  name = "source-intake"
-  enable_versioning = true
+# EVENTS 
+module "event_topics" {
+  source = "../../modules/sns/topic"
+  name   = "city_311_events"
 }
 
-module "dynamodb_s3_metadata_lookup_table" {
+module "dynamodb_event_store" {
   source = "../../modules/dynamodb"
-  table_name = "s3-metadata-lookup-table"
-  hash_key   = "item_id"     
-  range_key = "creation_date"       
-
+  table_name = "event-store"
+  hash_key   = "event_key"     
   attributes = [
-    { name = "item_id", type = "S" },
-    {name = "creation_date", type = "S"}
+    {name = "event_key", type = "S"}
   ]
 
   global_secondary_indexes = []
@@ -25,6 +20,17 @@ module "dynamodb_s3_metadata_lookup_table" {
   }
 }
 
+# INGESTION DATA STORES
+
+## SNAPSHOT
+module "source_intake_s3_storage" { 
+  source = "../../modules/s3"
+  project     = var.project
+  environment = var.environment
+  name = "source-intake"
+  enable_versioning = true
+}
+## INGESTION WORKFLOW CONFIG TABLE 
 module "dynamodb_config_table" {
   source = "../../modules/dynamodb"
   table_name = "config-table"
@@ -41,7 +47,7 @@ module "dynamodb_config_table" {
   }
 }
 
-
+## INTAKE TABLE 
 module "city_311_data" {
   source = "../../modules/dynamodb"
   # TODO: CHANGE TO - BETWEEN THEM SO IT IS STANDARD !!!
@@ -93,7 +99,6 @@ module "city_311_data" {
     ManagedBy   = "Terraform"
   }
 }
-
 
 
 
