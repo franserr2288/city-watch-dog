@@ -2,12 +2,7 @@ import City311ReportSchema, {
   type City311ExternalModel,
 } from 'src/ingestion/city-311/clients/city-311-report-schema';
 
-/**
- * MyLA311 Service Request Data Model
- * Represents a service request from the Los Angeles 311 system
- */
 export class ServiceRequest {
-  /** Unique service request identifier */
   public sr_number: string;
 
   public created_date: string;
@@ -19,7 +14,6 @@ export class ServiceRequest {
   /** Department or person responsible for handling the request */
   public owner: string | null;
 
-  /** Type/category of the service request */
   public request_type: string;
 
   public status: string;
@@ -27,16 +21,12 @@ export class ServiceRequest {
   /** Source channel where request was submitted (phone, web, mobile app, etc.) */
   public request_source: string | null;
 
-  /** Organization of the user who created the request */
   public created_by_user_organization: string | null;
 
-  /** Mobile operating system if submitted via mobile app */
   public mobile_os: string | null;
 
-  /** Whether the request was submitted anonymously */
   public anonymous: boolean;
 
-  /** Person or department assigned to handle the request */
   public assign_to: string | null;
 
   /** Scheduled date for service */
@@ -190,51 +180,6 @@ export class ServiceRequest {
     return null;
   }
 
-  // /**
-  //  * Convert the model to a plain object for JSON serialization
-  //  */
-  // public toJSON(): Record<string, any> {
-  //   return {
-  //     SRNumber: this.SRNumber,
-  //     CreatedDate: this.CreatedDate.toISOString(),
-  //     UpdatedDate: this.UpdatedDate?.toISOString() || null,
-  //     ActionTaken: this.ActionTaken,
-  //     Owner: this.Owner,
-  //     RequestType: this.RequestType,
-  //     Status: this.Status,
-  //     RequestSource: this.RequestSource,
-  //     CreatedByUserOrganization: this.CreatedByUserOrganization,
-  //     MobileOS: this.MobileOS,
-  //     Anonymous: this.Anonymous,
-  //     AssignTo: this.AssignTo,
-  //     ServiceDate: this.ServiceDate?.toISOString() || null,
-  //     ClosedDate: this.ClosedDate?.toISOString() || null,
-  //     AddressVerified: this.AddressVerified,
-  //     ApproximateAddress: this.ApproximateAddress,
-  //     Address: this.Address,
-  //     HouseNumber: this.HouseNumber,
-  //     Direction: this.Direction,
-  //     StreetName: this.StreetName,
-  //     Suffix: this.Suffix,
-  //     ZipCode: this.ZipCode,
-  //     Latitude: this.Latitude,
-  //     Longitude: this.Longitude,
-  //     Location: this.Location,
-  //     TBMPage: this.TBMPage,
-  //     TBMColumn: this.TBMColumn,
-  //     TBMRow: this.TBMRow,
-  //     APC: this.APC,
-  //     CD: this.CD,
-  //     CDMember: this.CDMember,
-  //     NC: this.NC,
-  //     NCName: this.NCName,
-  //     PolicePrecinct: this.PolicePrecinct,
-  //   };
-  // }
-
-  /**
-   * Create a new instance from a plain object (e.g., from API response)
-   */
   public static fromAPIJSON(data: unknown): ServiceRequest {
     const parsedData: City311ExternalModel = City311ReportSchema.parse(data);
     const instance = new ServiceRequest();
@@ -293,25 +238,16 @@ export class ServiceRequest {
   }
 }
 
-/**
- * Type alias for creating new service requests with optional fields
- */
 export type CreateServiceRequestData = Partial<
   Omit<ServiceRequest, 'SRNumber' | 'CreatedDate'>
 > & {
   RequestType: string;
 };
 
-/**
- * Type alias for updating existing service requests
- */
 export type UpdateServiceRequestData = Partial<
   Omit<ServiceRequest, 'SRNumber' | 'CreatedDate'>
 >;
 
-/**
- * Enum for common service request statuses
- */
 export enum ServiceRequestStatus {
   OPEN = 'Open',
   IN_PROGRESS = 'In Progress',
@@ -321,9 +257,6 @@ export enum ServiceRequestStatus {
   ASSIGNED = 'Assigned',
 }
 
-/**
- * Enum for common request sources
- */
 export enum RequestSource {
   PHONE = 'Phone',
   WEB = 'Web',
