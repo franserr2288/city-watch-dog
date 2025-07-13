@@ -1,6 +1,6 @@
 import { globSync } from 'fs';
 import { rm, mkdir } from 'fs/promises';
-import path, { basename, dirname, resolve } from 'path';
+import path, { basename, resolve } from 'path';
 
 export async function removeDir(dirPath: string) {
   try {
@@ -37,8 +37,9 @@ export function getOutputFilePath(entrypointName: string): string {
 }
 
 export function getEntryPointName(entrypoint: string): string {
-  const parentDir = dirname(entrypoint);
-  return basename(parentDir);
+  //const parentDir = dirname(entrypoint);
+  console.log('parent dir:');
+  return basename(entrypoint);
 }
 
 export function getLambdaEntrypoints(): string[] {

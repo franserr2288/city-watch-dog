@@ -6,15 +6,17 @@ import {
   removeDir,
   outputLambdaDir,
   ensureDir,
-  getOutputLocation,
   getOutputFilePath,
   getEntryPointName,
   getLambdaEntrypoints,
+  getOutputLocation,
 } from './helper.ts';
 import { fileURLToPath } from 'node:url';
 
 export default async function buildLambdas() {
   try {
+    // TODO:  go to root from anywhere you currently are
+
     const tempLambdaDir = resolve(process.cwd(), 'tmp', 'lambdas');
     const tempDir = resolve(process.cwd(), 'tmp');
 
@@ -29,10 +31,11 @@ export default async function buildLambdas() {
 
     await Promise.all(
       entrypoints.map(async (entryPoint) => {
+        console.log('*******');
         const entrypointName = getEntryPointName(entryPoint);
 
         const lambdaTempDir = path.join(tempLambdaDir, entrypointName);
-        const lambdaoutputLambdaDir = getOutputLocation(entrypointName);
+        const lambdaoutputLambdaDir = getOutputLocation(entryPoint);
 
         await ensureDir(lambdaTempDir);
         await ensureDir(lambdaoutputLambdaDir);

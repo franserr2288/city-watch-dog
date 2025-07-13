@@ -10,37 +10,37 @@ const skipDeploy = args.includes('--skip-deploy');
 
 export default async function buildThenDeployLambdas(): Promise<boolean> {
   try {
-    console.log('🚀 Starting build and deploy process...');
+    console.log('Starting build and deploy process...');
 
     if (!skipBuild) {
-      console.log('📦 Building Lambda functions...');
+      console.log('Building Lambda functions...');
       await buildLambdas();
-      console.log('✅ Build completed successfully.');
+      console.log('Build completed successfully.');
     } else {
-      console.log('⏩ Skipping build step as requested.');
+      console.log('Skipping build step as requested.');
     }
 
     if (!skipDeploy) {
-      console.log('🔄 Deploying infrastructure...');
+      console.log('Deploying infrastructure...');
       await deployLambdas();
-      console.log('✅ Deployment completed successfully.');
+      console.log('Deployment completed successfully.');
     } else {
-      console.log('⏩ Skipping deploy step as requested.');
+      console.log('Skipping deploy step as requested.');
     }
 
     if (!skipCleanup) {
-      console.log('🧹 Cleaning up build artifacts...');
+      console.log('Cleaning up build artifacts...');
       const outputLocation = getOutputLocation();
       await removeDir(outputLocation);
-      console.log(`✅ Removed build directory: ${outputLocation}`);
+      console.log(`Removed build directory: ${outputLocation}`);
     } else {
-      console.log('⏩ Skipping cleanup as requested.');
+      console.log('Skipping cleanup as requested.');
     }
 
-    console.log('✨ Process completed successfully!');
+    console.log('Process completed successfully!');
     return true;
   } catch (error) {
-    console.error('❌ Build and deploy process failed:', error);
+    console.error('Build and deploy process failed:', error);
     process.exit(1);
   }
 }
