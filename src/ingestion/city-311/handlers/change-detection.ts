@@ -6,7 +6,6 @@ import logger, {
   buildBaseLogContext,
   buildErrorLog,
 } from 'src/lib/logs/logger';
-import { getEnvVar } from 'src/lib/config/env';
 import {
   GenerateSuccessMessage,
   type LambdaTimeTriggerEventResponse,
@@ -34,7 +33,7 @@ export default async function handler(
 
     const dataSourceApiClient = new City311ApiClient();
     const inTakeTableStorageCLient: ServiceRequestTableClient =
-      new ServiceRequestTableClient(getEnvVar('DAILY_SNAPSHOT_BUCKET'));
+      new ServiceRequestTableClient();
     const dataExtractor: City311Extractor = new City311Extractor(
       dataSourceApiClient,
     );

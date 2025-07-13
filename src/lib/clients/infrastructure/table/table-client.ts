@@ -103,6 +103,9 @@ class TableStorageClient<TDataType> {
   }
 }
 export class ServiceRequestTableClient extends TableStorageClient<ServiceRequest> {
+  constructor() {
+    super(getEnvVar('INTAKE_TABLE'));
+  }
   public async getCity311Data(
     dataKeys: string[],
   ): Promise<Array<ServiceRequest>> {
@@ -113,14 +116,24 @@ export class ServiceRequestTableClient extends TableStorageClient<ServiceRequest
 export class CheckpointTableClient extends TableStorageClient<
   ConfigTableExpectedShape<City311PaginationCursor>
 > {
-  public async getBackfillRecord(): Promise<
-    ConfigTableExpectedShape<City311PaginationCursor> | undefined
-  > {
+  constructor() {
+    super(getEnvVar('CONFIG_TABLE'));
+  }
+  public async isBackfillFinished() {
+    const record = await this.getBackfillRecord();
+    return record !== null;
+  }
+  public async hasBackfillStarted(): Promise<boolean> {
+    const record = await this.getBatchedProcessRecord();
+    return record !== null;
+  }
+  public async getBackfillRecord(): Promise<ConfigTableExpectedShape<City311PaginationCursor> | null> {
     const dataKey: string = constructConfigKey(
       ConfigTableUseCases.IntakeBackfillCompleted,
       DataSource.Requests311,
     );
     const response = await this.getData([dataKey], 'config_key');
+    if (response.length == 0) return null;
     return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
   }
   public async getBatchedProcessRecord() {
@@ -129,6 +142,7 @@ export class CheckpointTableClient extends TableStorageClient<
       DataSource.Requests311,
     );
     const response = await this.getData([dataKey], 'config_key');
+    if (response.length == 0) return null;
     return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
   }
   public async getLastUpdateRecord() {
@@ -137,6 +151,7 @@ export class CheckpointTableClient extends TableStorageClient<
       DataSource.Requests311,
     );
     const response = await this.getData([dataKey], 'config_key');
+    if (response.length == 0) return null;
     return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
   }
 }

@@ -8,7 +8,6 @@ import {
   constructConfigKey,
 } from 'src/lib/clients/infrastructure/table/table-utils';
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
-import { getEnvVar } from 'src/lib/config/env';
 import type { City311DataRequestNeeds } from 'src/lib/types/behaviors/ingestion';
 import type {
   ConfigTableExpectedShape,
@@ -25,9 +24,7 @@ export class City311ApiClient
 
   constructor() {
     super(city311ApiEndpointContract);
-    this.checkpointTableClient = new CheckpointTableClient(
-      getEnvVar('CONFIG_TABLE'),
-    );
+    this.checkpointTableClient = new CheckpointTableClient();
   }
   public async *detectNewRecordsAndUpdatedRecordsSinceLastCheck(): AsyncGenerator<
     BatchResult<City311ExternalModel>,
@@ -37,28 +34,28 @@ export class City311ApiClient
     yield* this.getNewAndUpdatedRecordsSinceLastCheck(null, false);
   }
 
-  public async *getSnapshotBatches(): AsyncGenerator<
-    BatchResult<City311ExternalModel>,
-    void,
-    unknown
-  > {
-    yield* this.getHistoricalBatchIterator(false);
+  public async *getSnapshotBatches(
+    lastCheck: City311PaginationCursor | null,
+  ): AsyncGenerator<BatchResult<City311ExternalModel>, void, unknown> {
+    yield* this.getHistoricalBatchIterator(false, lastCheck);
   }
 
-  public async *getBackfillBatches(): AsyncGenerator<
-    BatchResult<City311ExternalModel>,
-    void,
-    unknown
-  > {
-    yield* this.getHistoricalBatchIterator(true);
+  public async *getBackfillBatches(
+    lastCheck: City311PaginationCursor | null,
+  ): AsyncGenerator<BatchResult<City311ExternalModel>, void, unknown> {
+    yield* this.getHistoricalBatchIterator(true, lastCheck);
   }
 
   private async *getHistoricalBatchIterator(
     checkpointProgress: boolean,
+    lastCheck: City311PaginationCursor | null,
   ): AsyncGenerator<BatchResult<City311ExternalModel>, void, unknown> {
-    const cursor: City311PaginationCursor | null = null;
+    let cursor: City311PaginationCursor | null = lastCheck;
 
     yield* this.processCursor(cursor, checkpointProgress, QueryType.NewRecords);
+
+    const record = await this.checkpointTableClient.getBatchedProcessRecord();
+    cursor = record === null ? record : record.data;
 
     if (cursor === null || checkpointProgress === false) return;
 
@@ -80,10 +77,9 @@ export class City311ApiClient
     if (lastCheck) {
       cursor = lastCheck.cursor;
     } else {
-      let response:
-        | ConfigTableExpectedShape<City311PaginationCursor>
-        | undefined = await this.checkpointTableClient.getLastUpdateRecord();
-      if (response === undefined)
+      let response: ConfigTableExpectedShape<City311PaginationCursor> | null =
+        await this.checkpointTableClient.getLastUpdateRecord();
+      if (response === null)
         response = await this.checkpointTableClient.getBackfillRecord();
 
       cursor = response?.data ?? null;
