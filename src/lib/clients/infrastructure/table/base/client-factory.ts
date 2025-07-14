@@ -3,7 +3,7 @@ import {
   type DynamoDBClientConfig,
 } from '@aws-sdk/client-dynamodb';
 import { EnvironmentDetector } from 'src/lib/config/internal/environment-detector';
-import { getLocalStackEndpoints } from '../../../config/endpoint-resolver';
+import { getLocalStackEndpoints } from '../../../../config/endpoint-resolver';
 
 export const createDynamoClient = (region: string): DynamoDBClient => {
   const config: DynamoDBClientConfig = {

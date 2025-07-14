@@ -2,11 +2,11 @@ import { SocrataClientBase } from 'src/lib/clients/socrata/socrata-base-client';
 import { city311ApiEndpointContract } from '../../../lib/clients/socrata/socrata-api-contract';
 import type { City311ExternalModel } from './city-311-report-schema';
 
-import { CheckpointTableClient } from 'src/lib/clients/infrastructure/table/table-client';
+import { CheckpointTableClient } from 'src/lib/clients/infrastructure/table/base/table-client';
 import {
   ConfigTableUseCases,
   constructConfigKey,
-} from 'src/lib/clients/infrastructure/table/table-utils';
+} from 'src/lib/clients/infrastructure/table/checkpoint/table-utils';
 import { DataSource } from 'src/lib/clients/socrata/socrata-constants';
 import type { City311DataRequestNeeds } from 'src/lib/types/behaviors/ingestion';
 import type {
@@ -66,7 +66,7 @@ export class City311ApiClient
       ),
       data: cursor,
     };
-    await this.checkpointTableClient.storeData([payload]);
+    await this.checkpointTableClient.save([payload]);
   }
 
   public async *getNewAndUpdatedRecordsSinceLastCheck(
@@ -99,7 +99,7 @@ export class City311ApiClient
       ),
       data: cursor,
     };
-    await this.checkpointTableClient.storeData([payload]);
+    await this.checkpointTableClient.save([payload]);
   }
   private constructNewRecordWhereClause(cursor: City311PaginationCursor) {
     if (cursor) {
@@ -163,7 +163,7 @@ export class City311ApiClient
           ),
           data: cursor,
         };
-        await this.checkpointTableClient.storeData([payload]);
+        await this.checkpointTableClient.save([payload]);
       }
 
       yield batchResult;

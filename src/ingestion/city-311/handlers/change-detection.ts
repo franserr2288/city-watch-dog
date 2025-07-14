@@ -1,4 +1,4 @@
-import { ServiceRequestTableClient } from 'src/lib/clients/infrastructure/table/table-client';
+import { ServiceRequestTableClient } from 'src/lib/clients/infrastructure/table/base/table-client';
 import { City311ApiClient } from '../clients/socrata-311-api-client';
 import City311Extractor from '../extractor';
 import type { CustomLogDescriptor } from 'src/lib/logs/base-log-shape';
@@ -38,7 +38,7 @@ export default async function handler(
       dataSourceApiClient,
     );
     for await (const chunk of dataExtractor.detectChanges()) {
-      await inTakeTableStorageCLient.storeData(chunk);
+      await inTakeTableStorageCLient.save(chunk);
       logger.debug(baseLogContext, `Processing chunk`);
     }
     logger.info(baseLogContext, 'Lambda execution completed successfully');

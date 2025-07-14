@@ -1,4 +1,4 @@
-import { ServiceRequestTableClient } from 'src/lib/clients/infrastructure/table/table-client';
+import { ServiceRequestTableClient } from 'src/lib/clients/infrastructure/table/base/table-client';
 import { getEnvVar } from 'src/lib/config/env';
 import { samplePayload } from '../../data/lib/clients/sample-object';
 import { beforeEach, describe, it } from 'node:test';
@@ -14,7 +14,7 @@ describe('TableStorageClient Lifecycle', () => {
   });
 
   it('should complete full data lifecycle: store and retrieve', async () => {
-    await tableClient.storeData([samplePayload]);
+    await tableClient.save([samplePayload]);
 
     const retrievedData = await tableClient.getCity311Data([
       samplePayload.sr_number,
@@ -31,7 +31,7 @@ describe('TableStorageClient Lifecycle', () => {
       { ...samplePayload, sr_number: 'SR2024-456' } as ServiceRequest,
     ];
 
-    await tableClient.storeData(multiplePayloads);
+    await tableClient.save(multiplePayloads);
 
     const srNumbers = multiplePayloads.map((p) => p.sr_number);
     const retrievedData = await tableClient.getCity311Data(srNumbers);

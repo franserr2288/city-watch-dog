@@ -1,7 +1,7 @@
 import {
   CheckpointTableClient,
   ServiceRequestTableClient,
-} from 'src/lib/clients/infrastructure/table/table-client';
+} from 'src/lib/clients/infrastructure/table/base/table-client';
 import { City311ApiClient } from '../clients/socrata-311-api-client';
 import City311Extractor from '../extractor';
 
@@ -38,7 +38,7 @@ export default async function handler(
       lastCheckResponse === null ? lastCheckResponse : lastCheckResponse.data;
 
     for await (const chunk of dataExtractor.backfill(lastCheck)) {
-      await inTakeTableStorageCLient.storeData(chunk);
+      await inTakeTableStorageCLient.save(chunk);
     }
     return GenerateSuccessMessage('backfill');
   } catch (error) {
