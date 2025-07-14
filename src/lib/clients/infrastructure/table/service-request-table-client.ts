@@ -1,8 +1,8 @@
 import { getEnvVar } from 'src/lib/config/env';
 import { ServiceRequest } from 'src/lib/types/models/service-request';
-import TableStorageClient from '../base/table-client';
+import TableStorageClient from './base/table-client';
 
-export class ServiceRequestTableClient extends TableStorageClient<ServiceRequest> {
+export default class ServiceRequestTableClient extends TableStorageClient<ServiceRequest> {
   constructor() {
     super(getEnvVar('INTAKE_TABLE'));
   }

@@ -1,7 +1,3 @@
-import {
-  CheckpointTableClient,
-  ServiceRequestTableClient,
-} from 'src/lib/clients/infrastructure/table/base/table-client';
 import { City311ApiClient } from '../clients/socrata-311-api-client';
 import City311Extractor from '../extractor';
 
@@ -13,6 +9,8 @@ import type {
   City311PaginationCursor,
   ConfigTableExpectedShape,
 } from 'src/lib/types/behaviors/pagination';
+import CheckpointTableClient from 'src/lib/clients/infrastructure/table/checkpoint-table-client';
+import ServiceRequestTableClient from 'src/lib/clients/infrastructure/table/service-request-table-client';
 
 export default async function handler(
   event,

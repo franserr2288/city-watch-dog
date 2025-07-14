@@ -4,10 +4,9 @@ import type {
   ConfigTableExpectedShape,
   City311PaginationCursor,
 } from 'src/lib/types/behaviors/pagination';
-import TableStorageClient from '../base/table-client';
-import { ConfigTableUseCases, constructConfigKey } from './table-utils';
+import TableStorageClient from './base/table-client';
 
-export class CheckpointTableClient extends TableStorageClient<
+export default class CheckpointTableClient extends TableStorageClient<
   ConfigTableExpectedShape<City311PaginationCursor>
 > {
   private constructTableKeys(dataKey) {
@@ -54,4 +53,16 @@ export class CheckpointTableClient extends TableStorageClient<
     if (response.length == 0) return null;
     return response.at(0) as ConfigTableExpectedShape<City311PaginationCursor>;
   }
+}
+
+export function constructConfigKey(
+  useCase: ConfigTableUseCases,
+  dataSource: DataSource,
+) {
+  return `${useCase.toString()}#${dataSource.toString()}`;
+}
+export enum ConfigTableUseCases {
+  IntakeBatchingProgressCheckpoints = 'batch',
+  IntakeBackfillCompleted = 'backfilled',
+  ChangeDetectionLayer = 'updated',
 }

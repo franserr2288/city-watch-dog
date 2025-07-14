@@ -26,7 +26,7 @@ export default async function handler(
     );
 
     await blobStorageClient.streamData(DataSource.Requests311, {
-      dataGenerator: dataExtractor.snapshot(),
+      dataGenerator: dataExtractor.snapshot(null),
       compress: true,
     });
     return GenerateSuccessMessage('daily-snapshot');

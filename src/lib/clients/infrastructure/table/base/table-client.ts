@@ -13,7 +13,6 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import { getEnvVar } from 'src/lib/config/env';
 import { createDynamoClient } from './client-factory';
-import { chunkArray } from '../checkpoint/table-utils';
 
 export default abstract class TableStorageClient<TDataType> {
   private dynamodb: DynamoDBDocumentClient;
@@ -87,4 +86,12 @@ export default abstract class TableStorageClient<TDataType> {
       currentRequests = unprocessed[this.tableName]!;
     }
   }
+}
+
+function chunkArray<T>(arr: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    chunks.push(arr.slice(i, i + size));
+  }
+  return chunks;
 }
