@@ -9,10 +9,19 @@ module "dynamodb_event_store" {
   table_name = "event-store"
   hash_key   = "event_key"     
   attributes = [
-    {name = "event_key", type = "S"}
+    {name = "event_key", type = "S"},
+    {name = "created_date" , type = "S"}, 
   ]
 
-  global_secondary_indexes = []
+  global_secondary_indexes = [
+    {
+      name = "created_date_index"
+      hash_key = "created_date"
+      range_key = "event_key"
+      projection_type = "ALL"
+      non_key_attributes = []
+    }
+  ]
 
   tags = {
     Project     = "Portfolio"
@@ -30,13 +39,14 @@ module "source_intake_s3_storage" {
   name = "source-intake"
   enable_versioning = true
 }
+
 ## INGESTION WORKFLOW CONFIG TABLE 
 module "dynamodb_config_table" {
   source = "../../modules/dynamodb"
-  table_name = "config-table"
+  table_name = "config-store"
   hash_key   = "config_key"     
   attributes = [
-    {name = "config_key", type = "S"}
+    {name = "config_key", type = "S"},
   ]
 
   global_secondary_indexes = []
@@ -50,9 +60,9 @@ module "dynamodb_config_table" {
 ## INTAKE TABLE 
 module "city_311_data" {
   source = "../../modules/dynamodb"
-  # TODO: CHANGE TO - BETWEEN THEM SO IT IS STANDARD !!!
-  table_name = "city_311_data"
+  table_name = "city-311-data-store"
   hash_key   = "sr_number" 
+
   attributes = [
     { name = "sr_number" , type = "S"},
     { name = "request_type", type = "S"},
@@ -71,13 +81,6 @@ module "city_311_data" {
       non_key_attributes = [] 
     }, 
     {
-      name = "updated_date_index"
-      hash_key = "updated_date",
-      range_key = "",
-      projection_type = "ALL"        
-      non_key_attributes = [] 
-    },
-    {
       name = "status_index"
       hash_key = "status",
       range_key = "created_date",
@@ -85,13 +88,26 @@ module "city_311_data" {
       non_key_attributes = [] 
     },
     {
+      name = "updated_date_index"
+      hash_key = "updated_date",
+      range_key = "sr_number",
+      projection_type = "KEYS_ONLY"        
+      non_key_attributes = [] 
+    },
+    {
       name = "request_source_index"
       hash_key = "request_source",
-      range_key = "",
-      projection_type = "ALL"        
+      range_key = "sr_number",
+      projection_type = "KEYS_ONLY"        
       non_key_attributes = [] 
+    },
+    {
+      name = "created_date_index"
+      hash_key = "created_date"
+      range_key = "sr_number"
+      projection_type = "KEYS_ONLY"
+      non_key_attributes = []
     }
-
   ]
 
   tags = {
